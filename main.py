@@ -1,37 +1,42 @@
 import math
 import random
 
-# def BlackJack():
-#     card_categories =  ["Hearts", "Diamonds", "Spades", "Clubs"]
-#     card_numbers = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
-#     deck = [(card, category) for category in card_categories for card in card_numbers]
+def main():
+    print("Welcome to the Gambling Website")
+    game = input("Which game would you like to play?\n1. Blackjack\n2. Roulette")
+    if game == 1:
+        
+def BlackJack():
+    card_categories =  ["Hearts", "Diamonds", "Spades", "Clubs"]
+    card_numbers = ["Ace", "2", "3", "4", "5", "6", "7", "8", "9", "10", "Jack", "Queen", "King"]
+    deck = [(card, category) for category in card_categories for card in card_numbers]
 
-#     random.shuffle(deck)
-#     player_card = [deck.pop(), deck.pop()]
-#     dealer_card = [deck.pop(), deck.pop()]
+    random.shuffle(deck)
+    player_card = [deck.pop(), deck.pop()]
+    dealer_card = [deck.pop(), deck.pop()]
     
-# def player_turn():
+def player_turn():
     
-# def dealer_turn():
+def dealer_turn():
 
-# def check_bust(player_card, dealer_card):
+def check_bust(player_card, dealer_card):
 
-#     while True:
-#         player_score = sum(card_type(card) for card in player_card)
-#         dealer_score = sum(card_type(card) for card in dealer_card)
-#         if player_score > 21:
-#             return True
-#         if dealer_score > 21:
-#             return True
+    while True:
+        player_score = sum(card_type(card) for card in player_card)
+        dealer_score = sum(card_type(card) for card in dealer_card)
+        if player_score > 21:
+            return True
+        if dealer_score > 21:
+            return True
 
 
-# def card_type(card):
-#     if card[0] in ["Jack", "Queen", "King"]:
-#         return 10
-#     elif card[0] in ["Ace"]:
-#         return 11
-#     else:
-#         return int(card[0])
+def card_type(card):
+    if card[0] in ["Jack", "Queen", "King"]:
+        return 10
+    elif card[0] in ["Ace"]:
+        return 11
+    else:
+        return int(card[0])
 
 wallet = 100
 
