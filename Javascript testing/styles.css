@@ -1,6 +1,17 @@
+/*Home Page*/
+
 .headingdiv{
     width: 50%;
     padding: 10px;
+}
+
+.cal-sans-regular {
+  font-family: "Cal Sans", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: whitesmoke;
+  font-size: 40px;
+  text-align: center;
 }
 
 .zen-tokyo-zoo-regular {
@@ -10,13 +21,16 @@
   font-size: 75px;
   text-align: center;
   color: whitesmoke;
+
 }
 
 .body{
     background-image: radial-gradient(rgb(30, 160, 30), rgb(0, 97, 0));
     background-repeat: no-repeat;
-    height: 100%;
-    width: 100%;
+    padding-left: 2%;
+    padding-right: 2%;
+    background-size: cover;
+
 }
 
 .html{
@@ -24,24 +38,35 @@
 }
 
 .column{
-    float: left;
-    width: 33.33%;
+    flex: 1 1 calc(33.33% - 20px);
+    box-sizing: border-box;
 }
 
-.row:after{
-    content: "";
-    display: table;
-    clear: both;
+.row{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card-link .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0, 0.3);
 }
 
 .card{
-    float: none;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-    transition: 0.3s;
-    background-image: ;
+    transition: 0.3s, transform 0.2s;
+    background-image: radial-gradient(rgb(221, 221, 221), black);
+    padding-top: 20%;
+    padding-bottom: 20%;
 }
 
 .card-img{
     border-radius: 50%;
-
+    margin: auto;
+    display: block;
+    width: 80%
+    
 }
+
