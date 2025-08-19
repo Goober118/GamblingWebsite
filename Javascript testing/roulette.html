@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="html">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Roulette</title>
     <link href="roulette.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
 </head>
 <body>
-    <h1>Roulette</h1>
+    <h1 class="zen-tokyo-zoo-regular">Roulette</h1>
     <div class="wheel-border">
         <div class="wheel-container">
             <div class="pointer"></div>
@@ -17,7 +22,7 @@
             <div class="inner-circle-stripes"></div>
         </div>
     </div>
-    <button onclick="spin()">Play</button>
+    <button class= "play-button" onclick="spin()">Play</button>
     <div id="result">Result: </div>
     <script src="roulette.js"></script>
 </body>

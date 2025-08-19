@@ -6,8 +6,8 @@ body {
 }
 
 .wheel-container {
-    width: 300px;
-    height: 300px;
+    width: 88%;
+    height: 88%;
     border-radius: 50%;
     position: relative;
     overflow: hidden;
@@ -15,10 +15,10 @@ body {
 }
 
 .wheel-border {
-    width: 340px;
-    height: 340px;
+    width: 30vw;
+    height: 30vw;
     border-radius: 50%;
-    margin: 20px auto;
+    margin: auto;
     position: relative;
     background: radial-gradient(circle, gold 0%, gold 66%, goldenrod 69%, #2e2000 100% );
     display: flex;
@@ -95,4 +95,14 @@ body {
     border-radius: 50%;
     background: radial-gradient(circle, transparent 69%, silver 69%);
     z-index: 5;
+}
+
+button {
+    margin-top: 20px;
+    height: 5vw;
+    width: 10vw;
+    background: radial-gradient(rgb(241, 138, 138), red);
+    border-radius: 2vw;
+    color: white;
+    font-size: 2vw;
 }
