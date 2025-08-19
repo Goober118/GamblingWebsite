@@ -70,6 +70,8 @@ body {
         red 340.55deg 350.28deg,
         black 350.28deg 360deg
     );
+    transform: rotate(0deg);
+    transition: transform 4s ease-out;
 }
 
 .inner-circle {
@@ -93,6 +95,31 @@ body {
     width: 85%;
     height: 85%;
     border-radius: 50%;
-    background: radial-gradient(circle, transparent 69%, silver 69%);
+    background: radial-gradient(circle, transparent 69%, goldenrod 69%);
     z-index: 5;
+}
+
+.numbers {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    transform: rotate(9deg);
+}
+
+.numbers span {
+    position:  absolute;
+    left: 45%;
+    top: 47%;
+    display: flex;
+    width: 28px;
+    height: 18px;
+    line-height: 18px;
+    font-size: 12px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
 }
