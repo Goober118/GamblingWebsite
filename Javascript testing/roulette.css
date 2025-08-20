@@ -83,7 +83,7 @@ body {
         red 340.55deg 350.28deg,
         black 350.28deg 360deg
     );
-    transition: transform 10s ease-out;
+    transition: transform 4s ease-out;
 }
 
 .inner-circle {
@@ -134,4 +134,28 @@ body {
     font-weight: bold;
     color: white;
     text-align: center;
+}
+
+.betting-grid {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 5px;
+    max-width: 600px;
+    margin: 20px auto;
+}
+
+.bet-button {
+    background: darkgreen;
+    color: white;
+    font-weight: bold;
+    border: 2px solid goldenrod;
+    padding: 10px;
+    border-radius: 3px;
+    font-size: 14px;
+}
+
+.bet-button.active {
+    background: gold;
+    color: black;
+    font-weight: bold;
 }
