@@ -5,9 +5,22 @@ body {
     color: white;
 }
 
+.pointer {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%) rotate(180deg);
+      width: 0;
+      height: 0;
+      border-left: 15px solid transparent;
+      border-right: 15px solid transparent;
+      border-bottom: 30px solid rgb(0, 0, 0);
+      z-index: 10;
+    }
+
 .wheel-container {
-    width: 88%;
-    height: 88%;
+    width: 300px;
+    height: 300px;
     border-radius: 50%;
     position: relative;
     overflow: hidden;
@@ -15,10 +28,10 @@ body {
 }
 
 .wheel-border {
-    width: 30vw;
-    height: 30vw;
+    width: 340px;
+    height: 340px;
     border-radius: 50%;
-    margin: auto;
+    margin: 20px auto;
     position: relative;
     background: radial-gradient(circle, gold 0%, gold 66%, goldenrod 69%, #2e2000 100% );
     display: flex;
@@ -70,8 +83,7 @@ body {
         red 340.55deg 350.28deg,
         black 350.28deg 360deg
     );
-    transform: rotate(0deg);
-    transition: transform 4s ease-out;
+    transition: transform 10s ease-out;
 }
 
 .inner-circle {
@@ -99,7 +111,6 @@ body {
     z-index: 5;
 }
 
-<<<<<<< HEAD
 .numbers {
     position: absolute;
     width: 100%;
@@ -108,14 +119,14 @@ body {
     top: 0;
     left: 0;
     pointer-events: none;
-    transform: rotate(9deg);
+    transform: rotate(355deg);
 }
 
 .numbers span {
     position:  absolute;
-    left: 45%;
+    left: 45.5%;
     top: 47%;
-    display: flex;
+    display: block;
     width: 28px;
     height: 18px;
     line-height: 18px;
@@ -123,14 +134,4 @@ body {
     font-weight: bold;
     color: white;
     text-align: center;
-=======
-button {
-    margin-top: 20px;
-    height: 5vw;
-    width: 10vw;
-    background: radial-gradient(rgb(241, 138, 138), red);
-    border-radius: 2vw;
-    color: white;
-    font-size: 2vw;
->>>>>>> e6a127824220d455b44ec4bde70765d6dcd11020
 }
