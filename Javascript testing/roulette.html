@@ -13,6 +13,7 @@
 </head>
 <body>
     <h1 class="zen-tokyo-zoo-regular">Roulette</h1>
+    <div class="wallet-amount" id="wallet-amount">Wallet Amount: </div>
     <div class="wheel-border">
         <div class="pointer"></div>
         <div class="wheel-container">
@@ -24,10 +25,8 @@
             <div class="inner-circle-stripes"></div>
         </div>
     </div>
-    <div class="wallet-display">
-        <div id="wallet-amount">Wallet Amount: </div>
     </div>
-    </div>
+    <h1 class="bet-heading">Choose a Wager</h1>
     <div class="betting-grid" id="betting-grid"></div>
     <div>
         <button class="bet-button" id="2-bet">$2</button>
@@ -36,6 +35,14 @@
     <!--Betting Form-->
     <button class="action-button" onclick="spin();">Place Bet</button>
     <div id="result">Result: </div>
+    <div id="win-popup" class="popup">
+        <div class="popup-content">
+            <p id="popup-message"></p>
+            <div class="popup-button" id="close-popup">
+                <p class="close-popup">Close</p>
+            </div>
+        </div>
+    </div>
     <script src="roulette.js"></script>
 </body>
 </html>

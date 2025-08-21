@@ -51,23 +51,37 @@ function spin() {
 // Betting grid creation
 let activeBet = null;
 const grid = document.getElementById("betting-grid");
-for (let i = 1; i <= 36; i++) {
-    const button = document.createElement("button");
-    button.classList.add("bet-button");
-    button.textContent = i;
-    button.addEventListener("click", () => {
-        if (activeBet) {
-            activeBet.classList.remove("active");
-        }
+const columns = 12;
+const rows = 3;
+const buttons = [];
+for (let row = 0; row < rows; row++) {
+    buttons[row] = [];
+    for (let col = 0; col < columns; col++) {
+        const number = col * rows + row + 1;
+        if (number > 36) continue;
+        buttons[row][col] = number;
+    }
+}
+for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < columns; col++) {
+        const number = buttons[row][col];
+        if (!number) continue; 
+        const button = document.createElement("button");
+        button.classList.add("bet-button");
+        button.textContent = number;
+        button.addEventListener("click", () => {
+            if (activeBet) {
+                activeBet.classList.remove("active");
+            }
 
-        selectedBet = i;
-        button.classList.add("active");
-        activeBet = button;
-
-        // Log the selected bet
-        console.log("Selected Bet:", selectedBet);
+            selectedBet = number;
+            button.classList.add("active");
+            activeBet = button;
+            console.log("Selected Bet:", selectedBet); 
     });
     grid.appendChild(button);
+    }
+    
 
 }
 // Place bet functionality
@@ -103,6 +117,12 @@ function placeBet(selectedAmount, selectedBet, spinNumber) {
         const winnings = selectedAmount * 36;
         walletAmount += winnings;
         console.log("Won $" + winnings);
+        const popup = document.getElementById("win-popup");
+        const popupMessage = document.getElementById("popup-message");
+        setTimeout(() => {
+            popupMessage.textContent = "You won $" + winnings;
+            popup.style.display = "block";
+        }, 1000);
         } else {
             console.log("you lose");
      }
@@ -110,4 +130,8 @@ function placeBet(selectedAmount, selectedBet, spinNumber) {
      walletDisplay.textContent = "Wallet: $" + walletAmount;
      
 }
+
+document.getElementById("close-popup").addEventListener("click", () => {
+    document.getElementById("win-popup").style.display = "none";
+});
 
