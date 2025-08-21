@@ -1,4 +1,6 @@
 
+let selectedBet = null;
+let selectedAmount = null;
 // Array of wheel numbers offset by 1 counterclockwise to match the colour bands
 const wheelNumbers = [
     26, 0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30,
@@ -23,33 +25,27 @@ let spinCount = 0;
 const wheel = document.getElementById("outer-bands");
 const result = document.getElementById("result");
 const offset = 360 / 37 / 2;
-function spin(selectedBet) {
+function spin() {
     const spinNumber = Math.floor(Math.random() * 37);
     const anglePerNumber = 360 / 37;
 
     spinCount++;
     let targetRotation = (360 * 5 * spinCount) + (360 - spinNumber * anglePerNumber) + offset; 
-
-    activeBet.classList.remove("active"); // Remove active class from previously selected bet
-    activeBet = null; // Reset active button
-    activeAmount.classList.remove("active");
-    activeAmount = null;
     wheel.style.transform = `rotate(${targetRotation}deg)`;
 
     setTimeout(() => {
         const resultNumber = wheelNumbers[spinNumber];
-        result.textContent = "Result: " + wheelNumbers[spinNumber];
-        if (selectedBet === resultNumber) {
-        console.log("you win");
-    }
+        result.textContent = "Result: " + resultNumber;
 
-    else {
-        console.log("you lose");
-    }
-    selectedBet = null; // Reset selected bet after spin
+
+            placeBet(selectedAmount, selectedBet, resultNumber);
+        if (activeBet) activeBet.classList.remove("active");
+        if (activeAmount) activeAmount.classList.remove("active");
+        activeBet = null;
+        activeAmount = null;
+        selectedBet = null;
+        selectedAmount = null;
     }, 4000);
-
-    
 }
 
 // Betting grid creation
@@ -75,27 +71,43 @@ for (let i = 1; i <= 36; i++) {
 
 }
 // Place bet functionality
-const wallet = document.getElementById("wallet");
+const walletDisplay = document.getElementById("wallet-amount");
 const betAmount = document.getElementById("bet-amount");
 let walletAmount = 100;
-let currentBet = 0;
+walletDisplay.textContent = "Wallet: $" + walletAmount;
 let activeAmount = null;
 const twoBet = document.getElementById("2-bet");
 const fiveBet = document.getElementById("5-bet");
 twoBet.addEventListener("click", () => {
-    const selectedAmount = 2;
+    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
+    selectedAmount = 2;
     twoBet.classList.add("active");
     activeAmount = twoBet;
     console.log("Selected Amount:", selectedAmount);
 });
 fiveBet.addEventListener("click", () => {
-    const selectedAmount = 5;
+    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
+    selectedAmount = 5;
     fiveBet.classList.add("active");
     activeAmount = fiveBet;
     console.log("Selected Amount:", selectedAmount);
 })
 
 function placeBet(selectedAmount, selectedBet, spinNumber) {
-    console.log(selectedAmount)
+    if (!selectedAmount || !selectedBet) {
+        console.log("You must select a bet amount");
+        return;
+    }
+     walletAmount -= selectedAmount;
+     if (selectedBet === spinNumber) {
+        const winnings = selectedAmount * 36;
+        walletAmount += winnings;
+        console.log("Won $" + winnings);
+        } else {
+            console.log("you lose");
+     }
+
+     walletDisplay.textContent = "Wallet: $" + walletAmount;
+     
 }
 
