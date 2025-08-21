@@ -30,8 +30,12 @@
     </div>
     </div>
     <div class="betting-grid" id="betting-grid"></div>
-    <button class="action-button">Place Bet</button>
-    <button onclick="spin()">Play</button>
+    <div>
+        <button class="bet-button" id="2-bet">$2</button>
+        <button class="bet-button" id="5-bet">$5</button>
+    </div>
+    <!--Betting Form-->
+    <button class="action-button" onclick="placeBet(); spin();">Place Bet</button>
     <div id="result">Result: </div>
     <script src="roulette.js"></script>
 </body>

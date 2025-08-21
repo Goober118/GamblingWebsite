@@ -30,10 +30,10 @@ function spin(selectedBet) {
     spinCount++;
     let targetRotation = (360 * 5 * spinCount) + (360 - spinNumber * anglePerNumber) + offset; 
 
-    if (activeButton) {
-        activeButton.classList.remove("active"); // Remove active class from previously selected bet
-        activeButton = null; // Reset active button
-    }
+    activeBet.classList.remove("active"); // Remove active class from previously selected bet
+    activeBet = null; // Reset active button
+    activeAmount.classList.remove("active");
+    activeAmount = null;
     wheel.style.transform = `rotate(${targetRotation}deg)`;
 
     setTimeout(() => {
@@ -53,20 +53,20 @@ function spin(selectedBet) {
 }
 
 // Betting grid creation
-let activeButton = null;
+let activeBet = null;
 const grid = document.getElementById("betting-grid");
 for (let i = 1; i <= 36; i++) {
     const button = document.createElement("button");
     button.classList.add("bet-button");
     button.textContent = i;
     button.addEventListener("click", () => {
-        if (activeButton) {
-            activeButton.classList.remove("active");
+        if (activeBet) {
+            activeBet.classList.remove("active");
         }
 
         selectedBet = i;
         button.classList.add("active");
-        activeButton = button;
+        activeBet = button;
 
         // Log the selected bet
         console.log("Selected Bet:", selectedBet);
@@ -77,8 +77,25 @@ for (let i = 1; i <= 36; i++) {
 // Place bet functionality
 const wallet = document.getElementById("wallet");
 const betAmount = document.getElementById("bet-amount");
+let walletAmount = 100;
 let currentBet = 0;
-function placeBet() {
-    
+let activeAmount = null;
+const twoBet = document.getElementById("2-bet");
+const fiveBet = document.getElementById("5-bet");
+twoBet.addEventListener("click", () => {
+    const selectedAmount = 2;
+    twoBet.classList.add("active");
+    activeAmount = twoBet;
+    console.log("Selected Amount:", selectedAmount);
+});
+fiveBet.addEventListener("click", () => {
+    const selectedAmount = 5;
+    fiveBet.classList.add("active");
+    activeAmount = fiveBet;
+    console.log("Selected Amount:", selectedAmount);
+})
+
+function placeBet(selectedAmount, selectedBet, spinNumber) {
+    console.log(selectedAmount)
 }
 
