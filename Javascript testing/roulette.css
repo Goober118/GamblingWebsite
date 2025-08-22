@@ -83,7 +83,7 @@ body {
         darkred 340.55deg 350.28deg,
         black 350.28deg 360deg
     );
-    transition: transform 4s ease-out;
+    transition: transform 8s cubic-bezier(0.0001, 0.5, 0.1, 0.9);
 }
 
 .inner-circle {
@@ -144,6 +144,7 @@ body {
 }
 
 .side-button {
+    font-size: 18px;
     flex: 1;
     padding: 10px;
     font-weight: bold;
