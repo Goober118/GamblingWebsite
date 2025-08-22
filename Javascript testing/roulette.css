@@ -6,17 +6,17 @@ body {
 }
 
 .pointer {
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%) rotate(180deg);
-      width: 0;
-      height: 0;
-      border-left: 15px solid transparent;
-      border-right: 15px solid transparent;
-      border-bottom: 30px solid rgb(0, 0, 0);
-      z-index: 10;
-    }
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%) rotate(180deg);
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-right: 15px solid transparent;
+    border-bottom: 30px solid rgb(0, 0, 0);
+    z-index: 10;
+}
 
 .wheel-container {
     width: 300px;
@@ -45,42 +45,42 @@ body {
     border-radius: 50%;
     position: absolute;
     background: conic-gradient(
-        green 0deg 9.73deg,
-        red 9.73deg 19.46deg,
+        darkgreen 0deg 9.73deg,
+        darkred 9.73deg 19.46deg,
         black 19.46deg 29.19deg,
-        red 29.19deg 38.92deg,
+        darkred 29.19deg 38.92deg,
         black 38.92deg 48.65deg,
-        red 48.65deg 58.38deg,
+        darkred 48.65deg 58.38deg,
         black 58.38deg 68.11deg,
-        red 68.11deg 77.84deg,
+        darkred 68.11deg 77.84deg,
         black 77.84deg 87.57deg,
-        red 87.57deg 97.3deg,
+        darkred 87.57deg 97.3deg,
         black 97.3deg 107.03deg,
-        red 107.03deg 116.76deg,
+        darkred 107.03deg 116.76deg,
         black 116.76deg 126.49deg,
-        red 126.49deg 136.22deg,
+        darkred 126.49deg 136.22deg,
         black 136.22deg 145.95deg,
-        red 145.95deg 155.68deg,
+        darkred 145.95deg 155.68deg,
         black 155.68deg 165.41deg,
-        red 165.41deg 175.14deg,
+        darkred 165.41deg 175.14deg,
         black 175.14deg 184.87deg,
-        red 184.87deg 194.6deg,
+        darkred 184.87deg 194.6deg,
         black 194.6deg 204.33deg,
-        red 204.33deg 214.06deg,
+        darkred 204.33deg 214.06deg,
         black 214.06deg 223.79deg,
-        red 223.79deg 233.52deg,
+        darkred 223.79deg 233.52deg,
         black 233.52deg 243.25deg,
-        red 243.25deg 252.98deg,
+        darkred 243.25deg 252.98deg,
         black 252.98deg 262.71deg,
-        red 262.71deg 272.44deg,
+        darkred 262.71deg 272.44deg,
         black 272.44deg 282.17deg,
-        red 282.17deg 291.9deg,
+        darkred 282.17deg 291.9deg,
         black 291.9deg 301.63deg,
-        red 301.63deg 311.36deg,
+        darkred 301.63deg 311.36deg,
         black 311.36deg 321.09deg,
-        red 321.09deg 330.82deg,
+        darkred 321.09deg 330.82deg,
         black 330.82deg 340.55deg,
-        red 340.55deg 350.28deg,
+        darkred 340.55deg 350.28deg,
         black 350.28deg 360deg
     );
     transition: transform 4s ease-out;
@@ -136,21 +136,72 @@ body {
     text-align: center;
 }
 
-.betting-grid {
+.betting-numbers {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    gap: 5px;
     max-width: 600px;
-    margin: 20px auto;
+
 }
 
-.bet-button {
-    background-image: radial-gradient(darkgreen 50%, goldenrod);
+.side-button {
+    width: 100%;
+}
+.betting-side-column {
+    display: flex;
+    flex-direction: column;
+    width: 70px;
+}
+
+.betting-grid {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    max-width: 1000px;
+}
+
+.bet-button-red {
+    background: darkred;
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
     padding: 10px;
-    border-radius: 3px;
+    font-size: 14px;
+}
+
+.bet-button-black {
+    background: black;
+    color: white;
+    font-weight: bold;
+    border: 2px solid goldenrod;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.bet-button-red.active {
+    background-image: radial-gradient(rgb(185, 1, 1) 40%, goldenrod);
+    color: white;
+    font-weight: bold;
+    border: 2px solid goldenrod;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.bet-button-black.active {
+    background-image: radial-gradient(rgb(31, 31, 31) 40%, goldenrod);
+    color: white;
+    font-weight: bold;
+    border: 2px solid goldenrod;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.bet-button {
+    background-image: radial-gradient(rgb(1, 81, 1) 40%, gold);
+    color: white;
+    font-weight: bold;
+    border: 2px solid goldenrod;
+    padding: 10px;
     font-size: 14px;
 }
 
@@ -160,21 +211,7 @@ body {
     font-weight: bold;
 }
 
-.amount-button {
-    background: darkgreen;
-    color: white;
-    font-weight: bold;
-    border: 2px solid goldenrod;
-    padding: 10px;
-    border-radius: 3px;
-    font-size: 14px;
-}
 
-.amount-button.active {
-    background: gold;
-    color: black;
-    font-weight: bold;
-}
 
 .popup {
     display: none;

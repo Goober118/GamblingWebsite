@@ -26,7 +26,7 @@ const wheel = document.getElementById("outer-bands");
 const result = document.getElementById("result");
 const offset = 360 / 37 / 2;
 function spin() {
-    const spinNumber = Math.floor(Math.random() * 37);
+    const spinNumber = 2;//Math.floor(Math.random() * 37);
     const anglePerNumber = 360 / 37;
 
     spinCount++;
@@ -36,9 +36,7 @@ function spin() {
     setTimeout(() => {
         const resultNumber = wheelNumbers[spinNumber];
         result.textContent = "Result: " + resultNumber;
-
-
-            placeBet(selectedAmount, selectedBet, resultNumber);
+        placeBet(selectedAmount, selectedBet, resultNumber);
         if (activeBet) activeBet.classList.remove("active");
         if (activeAmount) activeAmount.classList.remove("active");
         activeBet = null;
@@ -50,7 +48,7 @@ function spin() {
 
 // Betting grid creation
 let activeBet = null;
-const grid = document.getElementById("betting-grid");
+const grid = document.getElementById("betting-numbers");
 const columns = 12;
 const rows = 3;
 const buttons = [];
@@ -67,17 +65,50 @@ for (let row = 0; row < rows; row++) {
         const number = buttons[row][col];
         if (!number) continue; 
         const button = document.createElement("button");
-        button.classList.add("bet-button");
-        button.textContent = number;
+        if (number < 10) {
+            if (number % 2 === 0) {
+            button.classList.add("bet-button-black");
+            button.textContent = number;
+            } else {
+            button.classList.add("bet-button-red");
+            button.textContent = number;
+            }
+        } else if (9 < number && number < 20) {
+            if (number % 2 === 0) {
+            button.classList.add("bet-button-red");
+            button.textContent = number;
+            } else {
+            button.classList.add("bet-button-black");
+            button.textContent = number;
+            }
+        } else if (19 < number && number < 28) {
+            if (number % 2 === 0) {
+            button.classList.add("bet-button-black");
+            button.textContent = number;
+            } else {
+            button.classList.add("bet-button-red");
+            button.textContent = number;
+            }
+        } else if (27 < number && number < 37) {
+            if (number % 2 === 0) {
+            button.classList.add("bet-button-red");
+            button.textContent = number;
+            } else {
+            button.classList.add("bet-button-black");
+            button.textContent = number;
+            }
+        };
+
+        
         button.addEventListener("click", () => {
             if (activeBet) {
                 activeBet.classList.remove("active");
             }
-
             selectedBet = number;
             button.classList.add("active");
             activeBet = button;
             console.log("Selected Bet:", selectedBet); 
+        
     });
     grid.appendChild(button);
     }
@@ -92,6 +123,9 @@ walletDisplay.textContent = "Wallet: $" + walletAmount;
 let activeAmount = null;
 const twoBet = document.getElementById("2-bet");
 const fiveBet = document.getElementById("5-bet");
+const tenBet = document.getElementById("10-bet");
+const twentyBet = document.getElementById("20-bet");
+const fiftyBet = document.getElementById("50-bet");
 twoBet.addEventListener("click", () => {
     if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
     selectedAmount = 2;
@@ -105,29 +139,58 @@ fiveBet.addEventListener("click", () => {
     fiveBet.classList.add("active");
     activeAmount = fiveBet;
     console.log("Selected Amount:", selectedAmount);
+});
+tenBet.addEventListener("click", () => {
+    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
+    selectedAmount = 10;
+    tenBet.classList.add("active");
+    activeAmount = tenBet;
+    console.log("Selected Amount:", selectedAmount);
+});
+twentyBet.addEventListener("click", () => {
+    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
+    selectedAmount = 20;
+    twentyBet.classList.add("active");
+    activeAmount = twentyBet;
+    console.log("Selected Amount:", selectedAmount);
+});
+fiftyBet.addEventListener("click", () => {
+    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
+    selectedAmount = 50;
+    selectedBetType = "num"
+    fiftyBet.classList.add("active");
+    activeAmount = fiftyBet;
+    console.log("Selected Amount:", selectedAmount);
+});
+
+const betOdd = getElementById("bet-odd");
+
+betOdd.addEventListener("click", () => {
+    selectedBetType = "odd";
 })
+
 
 function placeBet(selectedAmount, selectedBet, spinNumber) {
     if (!selectedAmount || !selectedBet) {
         console.log("You must select a bet amount");
         return;
     }
-     walletAmount -= selectedAmount;
-     if (selectedBet === spinNumber) {
-        const winnings = selectedAmount * 36;
-        walletAmount += winnings;
-        console.log("Won $" + winnings);
-        const popup = document.getElementById("win-popup");
-        const popupMessage = document.getElementById("popup-message");
-        setTimeout(() => {
-            popupMessage.textContent = "You won $" + winnings;
-            popup.style.display = "block";
-        }, 1000);
-        } else {
-            console.log("you lose");
-     }
+    walletAmount -= selectedAmount;
+    if (selectedBet === spinNumber) {
+    const winnings = selectedAmount * 36;
+    walletAmount += winnings;
+    console.log("Won $" + winnings);
+    const popup = document.getElementById("win-popup");
+    const popupMessage = document.getElementById("popup-message");
+    setTimeout(() => {
+        popupMessage.textContent = "You won $" + winnings;
+        popup.style.display = "block";
+    }, 200);
+    } else {
+        console.log("you lose");
+    }
 
-     walletDisplay.textContent = "Wallet: $" + walletAmount;
+    walletDisplay.textContent = "Wallet: $" + walletAmount;
      
 }
 

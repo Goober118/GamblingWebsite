@@ -25,12 +25,22 @@
             <div class="inner-circle-stripes"></div>
         </div>
     </div>
-    </div>
+
     <h1 class="bet-heading">Choose a Wager</h1>
-    <div class="betting-grid" id="betting-grid"></div>
+    <div class="betting-grid" id="betting-grid">
+        <div class="betting-side-column">
+            <button class="side-button" id="bet-odd">Odd</button>
+            <button class="side-button" id="bet-even">Even</button>
+        </div>
+        <div class="betting-numbers" id="betting-numbers"></div>
+    </div>
+
     <div>
         <button class="bet-button" id="2-bet">$2</button>
         <button class="bet-button" id="5-bet">$5</button>
+        <button class="bet-button" id="10-bet">$10</button>
+        <button class="bet-button" id="20-bet">$20</button>
+        <button class="bet-button" id="50-bet">$50</button>
     </div>
     <!--Betting Form-->
     <button class="action-button" onclick="spin();">Place Bet</button>
