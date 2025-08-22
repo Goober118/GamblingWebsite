@@ -163,12 +163,25 @@ fiftyBet.addEventListener("click", () => {
     console.log("Selected Amount:", selectedAmount);
 });
 
-const betOdd = getElementById("bet-odd");
-
+const betOdd = document.getElementById("bet-odd");
+const betEven = document.getElementById("bet-even");
 betOdd.addEventListener("click", () => {
-    selectedBetType = "odd";
-})
+    if (activeBet) activeBet.classList.remove("active"); 
+    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
+    betOdd.classList.add("active");
+    selectedBet = "odd";
+    activeBet = betOdd;
+    console.log("Selected Bet: Odd");
+});
 
+betEven.addEventListener("click", () => {
+    if (activeBet) activeBet.classList.remove("active"); 
+    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
+    betEven.classList.add("active");
+    selectedBet = "even";
+    activeBet = betEven;
+    console.log("Selected Bet: Even");
+});
 
 function placeBet(selectedAmount, selectedBet, spinNumber) {
     if (!selectedAmount || !selectedBet) {
@@ -176,23 +189,39 @@ function placeBet(selectedAmount, selectedBet, spinNumber) {
         return;
     }
     walletAmount -= selectedAmount;
-    if (selectedBet === spinNumber) {
-    const winnings = selectedAmount * 36;
-    walletAmount += winnings;
-    console.log("Won $" + winnings);
-    const popup = document.getElementById("win-popup");
-    const popupMessage = document.getElementById("popup-message");
-    setTimeout(() => {
-        popupMessage.textContent = "You won $" + winnings;
-        popup.style.display = "block";
-    }, 200);
+    let won = false;
+    let winnings = 0;
+    if (typeof selectedBet === "number") {
+        if (selectedBet === spinNumber) {
+            winnings = selectedAmount * 36;
+            won = true;
+        }
+    } else if (selectedBet === "odd") {
+        if (spinNumber % 2 !== 0) {
+            winnings = selectedAmount * 2;
+            won = true;
+        }    
+    } else if (selectedBet === "even") {
+        if (spinNumber % 2 === 0) {
+            winnings = selectedAmount * 2;
+            won = true;
+        }
+    } 
+    if (won) {
+        walletAmount += winnings;
+        console.log("Won $" + winnings);
+        const popup = document.getElementById("win-popup");
+        const popupMessage = document.getElementById("popup-message");
+        setTimeout(() => {
+            popupMessage.textContent = "You won $" + (winnings - selectedAmount);
+            popup.style.display = "block";
+        }, 200);
     } else {
         console.log("you lose");
     }
 
     walletDisplay.textContent = "Wallet: $" + walletAmount;
-     
-}
+};
 
 document.getElementById("close-popup").addEventListener("click", () => {
     document.getElementById("win-popup").style.display = "none";

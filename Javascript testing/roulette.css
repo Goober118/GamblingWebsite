@@ -144,19 +144,29 @@ body {
 }
 
 .side-button {
-    width: 100%;
+    flex: 1;
+    padding: 10px;
+    font-weight: bold;
+    background: green;
+    color: white;
+    border: 2px solid goldenrod;
+}
+
+.side-button.active {
+    background-image: radial-gradient(green 30%, goldenrod);
+    color: white;
 }
 .betting-side-column {
     display: flex;
     flex-direction: column;
+    justify-content: stretch;
     width: 70px;
 }
 
 .betting-grid {
     display: flex;
-    flex-direction: row;
     justify-content: center;
-    align-items: flex-start;
+    align-items: stretch;
     max-width: 1000px;
 }
 
