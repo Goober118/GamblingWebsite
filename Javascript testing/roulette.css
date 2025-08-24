@@ -278,3 +278,43 @@ body {
     font-size: 30px;
     font-weight: bold;
 }
+
+.two-chip {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, white 0%, white 40%, red 40%, red 60%, white 60%, white 100%);
+    font-size: 10px;
+}
+
+.five-chip {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, white 0%, white 40%, blue 40%, blue 60%, white 60%, white 100%);
+    font-size: 10px;
+}
+
+.ten-chip {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, white 0%, white 40%, green 40%, green 60%, white 60%, white 100%);
+    font-size: 10px;
+}
+
+.twenty-chip {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, white 0%, white 40%, black 40%, black 60%, white 60%, white 100%);
+    font-size: 10px;
+}
+
+.fifty-chip {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: radial-gradient(circle, white 0%, white 40%, purple 40%, purple 60%, white 60%, white 100%);
+    font-size: 10px;
+}

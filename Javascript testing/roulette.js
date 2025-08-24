@@ -176,9 +176,12 @@ document.getElementById("close-popup").addEventListener("click", () => {
     document.getElementById("win-popup").style.display = "none";
 });
 
-document.querySelectorAll(".chip").forEach(chip => {
+
+
+document.querySelectorAll(".two-chip, .five-chip, .ten-chip, .twenty-chip, .fifty-chip").forEach(chip => {
     chip.addEventListener("dragstart", e => {
-        e.dataTransfer.setData("value", chip.dataset.value);   
+        e.dataTransfer.setData("value", chip.dataset.value);
+        e.dataTransfer.setData("chipClass", chip.className);
     });
 });
 
@@ -197,10 +200,12 @@ document.querySelectorAll(".bet-option, .bet-button").forEach(spot => {
             walletDisplay.textContent = "Wallet: $" + walletAmount;
             bets.push({ type, value, amount });
             console.log("Placed bet:", { type, value, amount });
-            const betChip = document.createElement("div");
-            betChip.classList.add("chip-on-board");
-            betChip.textContent = "$" + amount;
-            spot.appendChild(betChip);
+            spot.querySelectorAll(".chip-on-board").forEach(c => c.remove());
+            const chipClass = e.dataTransfer.getData("chipClass");
+            const chip = document.createElement("button");
+            chip.className = chipClass + " chip on board";
+            chip.setAttribute("disabled", "true");
+            spot.appendChild(chip);
         } else {
             console.log("Insufficient funds to place bet");
         }
