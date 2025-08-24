@@ -19,8 +19,6 @@ wheelNumbers.forEach((num, i) => {
 
 // Spin function and betting logic
 let spinCount = 0;
-let selectedBet = null;
-let selectedAmount = null;
 const wheel = document.getElementById("outer-bands");
 const result = document.getElementById("result");
 const offset = 360 / 37 / 2;
@@ -36,13 +34,8 @@ function spin() {
 
         const resultNumber = wheelNumbers[spinNumber];
         result.textContent = "Result: " + resultNumber;
-        placeBet(selectedAmount, selectedBet, resultNumber);
-        if (activeBet) activeBet.classList.remove("active");
-        if (activeAmount) activeAmount.classList.remove("active");
-        activeBet = null;
-        activeAmount = null;
-        selectedBet = null;
-        selectedAmount = null;
+        resolveBets(resultNumber);
+        document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
 
     }, 4000);
 }
@@ -75,6 +68,7 @@ for (let row = 0; row < rows; row++) {
 
         if (!number) continue; 
         const button = document.createElement("button");
+        button.classList.add("bet-button");
 
         if (number < 10) {
 
@@ -151,129 +145,65 @@ for (let row = 0; row < rows; row++) {
 
 // Place bet functionality
 const walletDisplay = document.getElementById("wallet-amount");
-const betAmount = document.getElementById("bet-amount");
 let walletAmount = 100;
 walletDisplay.textContent = "Wallet: $" + walletAmount;
-let activeAmount = null;
-const twoBet = document.getElementById("2-bet");
-const fiveBet = document.getElementById("5-bet");
-const tenBet = document.getElementById("10-bet");
-const twentyBet = document.getElementById("20-bet");
-const fiftyBet = document.getElementById("50-bet");
+let bets = [];
 
-twoBet.addEventListener("click", () => {
-    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
-    selectedAmount = 2;
-    twoBet.classList.add("active");
-    activeAmount = twoBet;
-    console.log("Selected Amount:", selectedAmount);
-});
+function resolveBets(resultNumber) {
+    let totalWinnings = 0;
 
-fiveBet.addEventListener("click", () => {
-    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
-    selectedAmount = 5;
-    fiveBet.classList.add("active");
-    activeAmount = fiveBet;
-    console.log("Selected Amount:", selectedAmount);
-});
+    bets.forEach(bet => {
+        let winnings = 0;
 
-tenBet.addEventListener("click", () => {
-    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
-    selectedAmount = 10;
-    tenBet.classList.add("active");
-    activeAmount = tenBet;
-    console.log("Selected Amount:", selectedAmount);
-});
-
-twentyBet.addEventListener("click", () => {
-    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
-    selectedAmount = 20;
-    twentyBet.classList.add("active");
-    activeAmount = twentyBet;
-    console.log("Selected Amount:", selectedAmount);
-});
-
-fiftyBet.addEventListener("click", () => {
-    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
-    selectedAmount = 50;
-    selectedBetType = "num"
-    fiftyBet.classList.add("active");
-    activeAmount = fiftyBet;
-    console.log("Selected Amount:", selectedAmount);
-});
-
-const betOdd = document.getElementById("bet-odd");
-const betEven = document.getElementById("bet-even");
-const bet0 = document.getElementById("bet-0");
-
-betOdd.addEventListener("click", () => {
-    if (activeBet) activeBet.classList.remove("active"); 
-    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
-    betOdd.classList.add("active");
-    selectedBet = "odd";
-    activeBet = betOdd;
-    console.log("Selected Bet: Odd");
-});
-
-betEven.addEventListener("click", () => {
-    if (activeBet) activeBet.classList.remove("active"); 
-    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
-    betEven.classList.add("active");
-    selectedBet = "even";
-    activeBet = betEven;
-    console.log("Selected Bet: Even");
-});
-
-bet0.addEventListener("click", () => {
-    if (activeBet) activeBet.classList.remove("active"); 
-    if (activeAmount) activeAmount.classList.remove("active"); // Remove active class from previously selected amount
-    bet0.classList.add("active");
-    selectedBet = 0;
-    activeBet = bet0;
-    console.log("Selected Bet: 0");
-});
-
-function placeBet(selectedAmount, selectedBet, spinNumber) {
-    if (selectedAmount == null || selectedBet == null) {
-        console.log("You must select a bet amount");
-        return;
-    }
-    walletAmount -= selectedAmount;
-    let won = false;
-    let winnings = 0;
-    if (typeof selectedBet === "number") {
-        if (selectedBet === spinNumber) {
-            winnings = selectedAmount * 36;
+        if (bet.type === "number" && bet.value === resultNumber) {
+            winnings = bet.amount * 36;
             won = true;
-        }
-    } else if (selectedBet === "odd") {
-        if (spinNumber % 2 !== 0) {
-            winnings = selectedAmount * 2;
+        } else if (bet.type === "odd" && resultNumber % 2 !== 0) {
+            winnings = bet.amount * 2;
             won = true;
-        }    
-    } else if (selectedBet === "even") {
-        if (spinNumber % 2 === 0) {
-            winnings = selectedAmount * 2;
+        } else if (bet.type === "even" && resultNumber % 2 === 0) {
+            winnings = bet.amount * 2; 
             won = true;
-        }
-    } 
-    if (won) {
-        walletAmount += winnings;
-        console.log("Won $" + winnings);
-        const popup = document.getElementById("win-popup");
-        const popupMessage = document.getElementById("popup-message");
-        setTimeout(() => {
-            popupMessage.textContent = "You won $" + (winnings - selectedAmount);
-            popup.style.display = "block";
-        }, 200);
-    } else {
-        console.log("you lose");
-    }
-
+        };
+        totalWinnings += winnings;
+    });
+    walletAmount += totalWinnings;
     walletDisplay.textContent = "Wallet: $" + walletAmount;
-};
+    bets = [];
+}
 
 document.getElementById("close-popup").addEventListener("click", () => {
     document.getElementById("win-popup").style.display = "none";
+});
+
+document.querySelectorAll(".chip").forEach(chip => {
+    chip.addEventListener("dragstart", e => {
+        e.dataTransfer.setData("value", chip.dataset.value);   
+    });
+});
+
+document.querySelectorAll(".bet-option, .bet-button").forEach(spot => {
+    spot.addEventListener("dragover", e => {
+        e.preventDefault();
+    });
+   
+    spot.addEventListener("drop", e => {
+        e.preventDefault();
+        const amount = parseInt(e.dataTransfer.getData("value"), 10);
+        const type = spot.dataset.type || "number";
+        const value = type === "number" ? parseInt(spot.textContent, 10) : spot.dataset.type;
+        if (walletAmount >= amount) {
+            walletAmount -= amount;
+            walletDisplay.textContent = "Wallet: $" + walletAmount;
+            bets.push({ type, value, amount });
+            console.log("Placed bet:", { type, value, amount });
+            const betChip = document.createElement("div");
+            betChip.classList.add("chip-on-board");
+            betChip.textContent = "$" + amount;
+            spot.appendChild(betChip);
+        } else {
+            console.log("Insufficient funds to place bet");
+        }
+    });
 });
 
