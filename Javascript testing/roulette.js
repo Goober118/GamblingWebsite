@@ -37,7 +37,7 @@ function spin() {
         resolveBets(resultNumber);
         document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
 
-    }, 4000);
+    }, 8000);
 }
 
 // Betting grid creation
@@ -191,20 +191,17 @@ document.querySelectorAll(".bet-option, .bet-button").forEach(spot => {
     });
    
     spot.addEventListener("drop", e => {
+        const oldChip = spot.querySelector(".chip-on-board")
+        if (oldChip) oldChip.remove()
         e.preventDefault();
         const amount = parseInt(e.dataTransfer.getData("value"), 10);
-        const type = spot.dataset.type || "number";
-        const value = type === "number" ? parseInt(spot.textContent, 10) : spot.dataset.type;
+        const chipClass = e.dataTransfer.getData("chipClass").split(" ")[0];
         if (walletAmount >= amount) {
             walletAmount -= amount;
             walletDisplay.textContent = "Wallet: $" + walletAmount;
-            bets.push({ type, value, amount });
-            console.log("Placed bet:", { type, value, amount });
-            spot.querySelectorAll(".chip-on-board").forEach(c => c.remove());
-            const chipClass = e.dataTransfer.getData("chipClass");
-            const chip = document.createElement("button");
-            chip.className = chipClass + " chip on board";
-            chip.setAttribute("disabled", "true");
+            bets.push({ type: "number", value: parseInt(spot.textContent, 10), amount });
+            const chip = document.createElement("div");
+            chip.className = chipClass + " chip-on-board";
             spot.appendChild(chip);
         } else {
             console.log("Insufficient funds to place bet");

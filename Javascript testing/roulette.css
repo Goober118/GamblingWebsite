@@ -172,51 +172,57 @@ body {
 }
 
 .bet-button-red {
+    position: relative;
     background: darkred;
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
-    padding: 10px;
+    padding: none;
     font-size: 14px;
 }
 
 .bet-button-black {
+    position: relative;
     background: black;
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
-    padding: 10px;
+    padding: none;
     font-size: 14px;
 }
 
 .bet-button-red.active {
+    position: relative;
     background-image: radial-gradient(rgb(185, 1, 1) 40%, goldenrod);
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
-    padding: 10px;
+    padding: none;
     font-size: 14px;
 }
 
 .bet-button-black.active {
+    position: relative;
     background-image: radial-gradient(rgb(31, 31, 31) 40%, goldenrod);
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
-    padding: 10px;
+    padding: none;
     font-size: 14px;
 }
 
 .bet-button {
+    position: relative;
     background-image: radial-gradient(rgb(1, 81, 1) 40%, gold);
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
-    padding: 10px;
+    padding: none;
     font-size: 14px;
 }
 
 .bet-button.active {
+    position: relative;
     background-image: radial-gradient(gold 30%, goldenrod);
     color: black;
     font-weight: bold;
@@ -279,42 +285,49 @@ body {
     font-weight: bold;
 }
 
-.two-chip {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: radial-gradient(circle, white 0%, white 40%, red 40%, red 60%, white 60%, white 100%);
-    font-size: 10px;
-}
-
-.five-chip {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: radial-gradient(circle, white 0%, white 40%, blue 40%, blue 60%, white 60%, white 100%);
-    font-size: 10px;
-}
-
-.ten-chip {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: radial-gradient(circle, white 0%, white 40%, green 40%, green 60%, white 60%, white 100%);
-    font-size: 10px;
-}
-
-.twenty-chip {
-    width: 30px;
-    height: 30px;
-    border-radius: 50%;
-    background: radial-gradient(circle, white 0%, white 40%, black 40%, black 60%, white 60%, white 100%);
-    font-size: 10px;
-}
-
+.two-chip,
+.five-chip,
+.ten-chip,
+.twenty-chip,
 .fifty-chip {
     width: 30px;
     height: 30px;
     border-radius: 50%;
+    border: none;
+}
+
+.two-chip {
+    background: radial-gradient(circle, white 0%, white 40%, red 40%, red 60%, white 60%, white 100%);
+}
+
+.five-chip {
+    background: radial-gradient(circle, white 0%, white 40%, green 40%, green 60%, white 60%, white 100%);
+}
+
+.ten-chip {
+    background: radial-gradient(circle, white 0%, white 40%, blue 40%, blue 60%, white 60%, white 100%);
+}
+
+.twenty-chip {
     background: radial-gradient(circle, white 0%, white 40%, purple 40%, purple 60%, white 60%, white 100%);
-    font-size: 10px;
+}
+
+.fifty-chip {
+    background: radial-gradient(circle, white 0%, white 40%, goldenrod 40%, goldenrod 60%, white 60%, white 100%);
+}
+
+.chip-on-board {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 14px;
+    pointer-events: none;
 }
