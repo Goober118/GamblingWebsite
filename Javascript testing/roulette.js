@@ -1,3 +1,4 @@
+
 // Array of wheel numbers offset by 1 counterclockwise to match the colour bands
 const wheelNumbers = [
     26, 0, 32, 15, 19, 4, 21, 2, 25, 17, 34, 6, 27, 13, 36, 11, 30,
@@ -151,24 +152,37 @@ let bets = [];
 
 function resolveBets(resultNumber) {
     let totalWinnings = 0;
-
+    let won = false;
     bets.forEach(bet => {
         let winnings = 0;
 
         if (bet.type === "number" && bet.value === resultNumber) {
             winnings = bet.amount * 36;
             won = true;
-        } else if (bet.type === "odd" && resultNumber % 2 !== 0) {
+
+        } else if (bet.type === "bet-odd" && resultNumber % 2 !== 0 && resultNumber != 0) {
             winnings = bet.amount * 2;
             won = true;
-        } else if (bet.type === "even" && resultNumber % 2 === 0) {
+
+        } else if (bet.type === "bet-even" && resultNumber % 2 === 0 && resultNumber != 0) {
             winnings = bet.amount * 2; 
             won = true;
+
+        } else if (bet.type === "bet-0" && resultNumber === 0) {
+            winnings = bet.amount * 36
+            won = true;
+
         };
         totalWinnings += winnings;
+
     });
     walletAmount += totalWinnings;
     walletDisplay.textContent = "Wallet: $" + walletAmount;
+    if (won) {
+        document.getElementById("popup-message").textContent = `You won $${(totalWinnings)}!`;
+        document.getElementById("win-popup").style.display = "block";
+    };
+    
     bets = [];
 }
 
@@ -185,23 +199,29 @@ document.querySelectorAll(".two-chip, .five-chip, .ten-chip, .twenty-chip, .fift
     });
 });
 
-document.querySelectorAll(".bet-option, .bet-button").forEach(spot => {
+document.querySelectorAll(".bet-option, .bet-button, .side-button").forEach(spot => {
     spot.addEventListener("dragover", e => {
         e.preventDefault();
     });
    
     spot.addEventListener("drop", e => {
-        const oldChip = spot.querySelector(".chip-on-board")
-        if (oldChip) oldChip.remove()
         e.preventDefault();
+
+        const oldChip = spot.querySelector(".chip-on-board");
+        if (oldChip) oldChip.remove();
+
         const amount = parseInt(e.dataTransfer.getData("value"), 10);
         const chipClass = e.dataTransfer.getData("chipClass").split(" ")[0];
+
         if (walletAmount >= amount) {
             walletAmount -= amount;
             walletDisplay.textContent = "Wallet: $" + walletAmount;
-            bets.push({ type: "number", value: parseInt(spot.textContent, 10), amount });
+            let betType = (spot.id === "bet-odd" || spot.id === "bet-even") ? spot.id : "number";
+            value = betType === "number" ? parseInt(spot.textContent, 10) : null;
+            bets.push({ type: betType, value, amount });
             const chip = document.createElement("div");
             chip.className = chipClass + " chip-on-board";
+            chip.textContent = amount;
             spot.appendChild(chip);
         } else {
             console.log("Insufficient funds to place bet");

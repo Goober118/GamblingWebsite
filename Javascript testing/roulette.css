@@ -211,6 +211,11 @@ body {
     font-size: 14px;
 }
 
+.bet-button,
+.side-button {
+    position: relative;
+}
+
 .bet-button {
     position: relative;
     background-image: radial-gradient(rgb(1, 81, 1) 40%, gold);
