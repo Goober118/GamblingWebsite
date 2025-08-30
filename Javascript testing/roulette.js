@@ -4,6 +4,9 @@ let walletAmount = 100;
 let bets = [];
 let wheelNumbers = []
 let isSpinning = false;
+const spinAudio = new Audio('sfx/spin.mp3');
+const loseAudio = new Audio('sfx/lose.mp3');
+const winAudio = new Audio('sfx/win.mp3');
 
 
 function main() {
@@ -222,20 +225,19 @@ function initBoard() {
 
 function spin() {
     if (isSpinning) return;
+    spinAudio.play();
     isSpinning = true;
     const spinNumber = Math.floor(Math.random() * 37);
     const anglePerNumber = 360 / 37;
     spinCount++;
     let targetRotation = (360 * 5 * spinCount) + (360 - spinNumber * anglePerNumber) + offset; 
     wheel.style.transform = `rotate(${targetRotation}deg)`;
-
     setTimeout(() => {
-
         const resultNumber = wheelNumbers[spinNumber];
         resolveBets(resultNumber);
         document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
         isSpinning = false;
-    }, 8000);
+    }, 5500);
     
 }
 
@@ -300,9 +302,11 @@ function resolveBets(resultNumber) {
     walletAmount += totalWinnings;
     walletDisplay.textContent = "Wallet: $" + walletAmount;
     if (won) {
+        winAudio.play();
         document.getElementById("popup-message").textContent = `You won $${(totalWinnings)}!`;
         document.getElementById("win-popup").style.display = "block";
     } else if (won === false) {
+        loseAudio.play();
         body.classList.add("lose");
         setTimeout(() => {
             body.classList.remove("lose");
