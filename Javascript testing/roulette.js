@@ -3,6 +3,7 @@ let wheel, result, offset, walletDisplay;
 let walletAmount = 100;
 let bets = [];
 let wheelNumbers = []
+let isSpinning = false;
 
 function main() {
     wheel = document.getElementById("outer-bands");
@@ -43,6 +44,8 @@ function main() {
 function handleDrop(e, spot) {
     e.preventDefault();
 
+    if (isSpinning) return;
+
     const oldChip = spot.querySelector(".chip-on-board");
     if (oldChip) oldChip.remove();
 
@@ -57,7 +60,6 @@ function handleDrop(e, spot) {
         bets.push({ type: betType, value, amount });
         const chip = document.createElement("div");
         chip.className = chipClass + " chip-on-board";
-        chip.textContent = amount;
         spot.appendChild(chip);
     } else {
         console.log("Insufficient funds to place bet");
@@ -145,19 +147,6 @@ function initBoard() {
                 button.textContent = number;
                 }
             };
-            
-            button.addEventListener("click", () => {
-
-                if (activeBet) {
-                    activeBet.classList.remove("active");
-                }
-
-                selectedBet = number;
-                button.classList.add("active");
-                activeBet = button;
-                console.log("Selected Bet:", selectedBet); 
-            
-        });
 
         grid.appendChild(button);
 
@@ -166,7 +155,8 @@ function initBoard() {
 }
 
 function spin() {
-
+    if (isSpinning) return;
+    isSpinning = true;
     const spinNumber = Math.floor(Math.random() * 37);
     const anglePerNumber = 360 / 37;
     spinCount++;
@@ -179,8 +169,9 @@ function spin() {
         result.textContent = "Result: " + resultNumber;
         resolveBets(resultNumber);
         document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
-
+        isSpinning = false;
     }, 8000);
+    
 }
 
 function resolveBets(resultNumber) {

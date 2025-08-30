@@ -1,7 +1,12 @@
 body {
+    margin: 0;
+    height: 100vh;
     text-align: center;
     font-family: Arial, Helvetica, sans-serif;
-    background: rgb(5, 95, 5);
+    background: radial-gradient(circle at center, 
+    #2c2c2c 0%, 
+    #1a1a1a 70%,  
+    #000000 100%  );
     color: white;
 }
 
@@ -139,7 +144,8 @@ body {
 .betting-numbers {
     display: grid;
     grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: 40px;
+    grid-auto-rows: 1fr;
+    aspect-ratio: 12 / 3;
     max-width: 600px;
 }
 
@@ -148,15 +154,12 @@ body {
     flex: 1;
     padding: 10px;
     font-weight: bold;
-    background: green;
+    background-image: radial-gradient(#005000 20%, #004c00 100%);
     color: white;
     border: 2px solid goldenrod;
 }
 
-.side-button.active {
-    background-image: radial-gradient(green 30%, goldenrod);
-    color: white;
-}
+
 .betting-side-column {
     display: flex;
     flex-direction: column;
@@ -169,6 +172,7 @@ body {
     justify-content: center;
     align-items: stretch;
     max-width: 1000px;
+    margin: 0 auto;
 }
 
 .bet-button-red {
@@ -191,25 +195,6 @@ body {
     font-size: 14px;
 }
 
-.bet-button-red.active {
-    position: relative;
-    background-image: radial-gradient(rgb(185, 1, 1) 40%, goldenrod);
-    color: white;
-    font-weight: bold;
-    border: 2px solid goldenrod;
-    padding: none;
-    font-size: 14px;
-}
-
-.bet-button-black.active {
-    position: relative;
-    background-image: radial-gradient(rgb(31, 31, 31) 40%, goldenrod);
-    color: white;
-    font-weight: bold;
-    border: 2px solid goldenrod;
-    padding: none;
-    font-size: 14px;
-}
 
 .bet-button,
 .side-button {
@@ -218,21 +203,13 @@ body {
 
 .bet-button {
     position: relative;
-    background-image: radial-gradient(rgb(1, 81, 1) 40%, gold);
+    background: #004c00;
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
     padding: none;
     font-size: 14px;
 }
-
-.bet-button.active {
-    position: relative;
-    background-image: radial-gradient(gold 30%, goldenrod);
-    color: black;
-    font-weight: bold;
-}
-
 
 
 .popup {
@@ -294,32 +271,61 @@ body {
 .five-chip,
 .ten-chip,
 .twenty-chip,
-.fifty-chip {
+.fifty-chip,
+.chip-on-board {
+    position: relative;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+    display: inline-block;
+    z-index: 1;
+    overflow: visible;
     width: 30px;
     height: 30px;
     border-radius: 50%;
     border: none;
 }
 
-.two-chip {
-    background: radial-gradient(circle, white 0%, white 40%, red 40%, red 60%, white 60%, white 100%);
+.two-chip      { background: #9C2007; }
+.five-chip     { background: #003366; } 
+.ten-chip      { background: #3d003d; } 
+.twenty-chip   { background: #b27300; } 
+.fifty-chip    { background: #000000; color: white; } 
+
+.two-chip::after,
+.five-chip::after,
+.ten-chip::after,
+.twenty-chip::after,
+.fifty-chip::after,
+.chip-on-board::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+        white 0deg 15deg, transparent 15deg 30deg,
+        white 30deg 45deg, transparent 45deg 60deg,
+        white 60deg 75deg, transparent 75deg 90deg,
+        white 90deg 105deg, transparent 105deg 120deg,
+        white 120deg 135deg, transparent 135deg 150deg,
+        white 150deg 165deg, transparent 165deg 180deg,
+        white 180deg 195deg, transparent 195deg 210deg,
+        white 210deg 225deg, transparent 225deg 240deg,
+        white 240deg 255deg, transparent 255deg 270deg,
+        white 270deg 285deg, transparent 285deg 300deg,
+        white 300deg 315deg, transparent 315deg 330deg,
+        white 330deg 345deg, transparent 345deg 360deg
+
+    );
+
+    mask-image: radial-gradient(circle, transparent 50%, black 50%, black 100%);
+    mask-repeat: no-repeat;
+    mask-position: center;
+    mask-size: cover;
+
+    pointer-events: none;
 }
 
-.five-chip {
-    background: radial-gradient(circle, white 0%, white 40%, green 40%, green 60%, white 60%, white 100%);
-}
 
-.ten-chip {
-    background: radial-gradient(circle, white 0%, white 40%, blue 40%, blue 60%, white 60%, white 100%);
-}
-
-.twenty-chip {
-    background: radial-gradient(circle, white 0%, white 40%, purple 40%, purple 60%, white 60%, white 100%);
-}
-
-.fifty-chip {
-    background: radial-gradient(circle, white 0%, white 40%, goldenrod 40%, goldenrod 60%, white 60%, white 100%);
-}
 
 .chip-on-board {
     position: absolute;
