@@ -5,9 +5,9 @@ let bets = [];
 let wheelNumbers = []
 let isSpinning = false;
 
+
 function main() {
     wheel = document.getElementById("outer-bands");
-    result = document.getElementById("result");
     offset = 360 / 37 / 2;
     walletDisplay = document.getElementById("wallet-amount");
     walletDisplay.textContent = "Wallet: $" + walletAmount;
@@ -44,6 +44,7 @@ function main() {
 function handleDrop(e, spot) {
     e.preventDefault();
 
+    if (spot.querySelector('.chip-on-board')) return;
     if (isSpinning) return;
 
     const oldChip = spot.querySelector(".chip-on-board");
@@ -60,7 +61,22 @@ function handleDrop(e, spot) {
         bets.push({ type: betType, value, amount });
         const chip = document.createElement("div");
         chip.className = chipClass + " chip-on-board";
+        chip.dataset.amount = amount;
+        chip.style.cursor = "pointer";
+        chip.addEventListener("click", function(e) {
+            e.stopPropagation();
+            chip.remove();
+            walletAmount += parseInt(chip.dataset.amount, 10);
+            walletDisplay.textContent = "Wallet: $" + walletAmount;
+            bets = bets.filter(bet => {
+                if (bet.type === "number") {
+                    return !(bet.value === parseInt(spot.textContent, 10) && bet.amount === parseInt(chip.dataset.amount, 10));
+                }
+                return !(bet.type === spot.id && bet.amount === parseInt(chip.dataset.amount, 10));
+            });
+        });
         spot.appendChild(chip);
+        chip.setAttribute("draggable", "false");
     } else {
         console.log("Insufficient funds to place bet");
     };
@@ -87,7 +103,7 @@ function initWheel() {
 
         const span = document.createElement("span"); // Create one span element for each number
         span.textContent = num; // Insert the number into the corresponding span position
-        span.style.transform = `rotate(${i * anglePerNumber}deg) translateY(-137px)`; // position each span element by multiplying the band angle size by the index number, then translate it outwards to create a 140px radius
+        span.style.transform = `rotate(${i * anglePerNumber}deg) translateY(-170px)`; // position each span element by multiplying the band angle size by the index number, then translate it outwards to create a 140px radius
         numbersContainer.appendChild(span);
         
     });
@@ -166,7 +182,6 @@ function spin() {
     setTimeout(() => {
 
         const resultNumber = wheelNumbers[spinNumber];
-        result.textContent = "Result: " + resultNumber;
         resolveBets(resultNumber);
         document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
         isSpinning = false;

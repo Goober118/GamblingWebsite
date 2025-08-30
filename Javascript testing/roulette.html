@@ -10,43 +10,51 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Zen+Tokyo+Zoo&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 </head>
 <body>
     <h1 class="zen-tokyo-zoo-regular">Roulette</h1>
-    <div class="wallet-amount" id="wallet-amount">Wallet Amount: </div>
-    <div class="wheel-border">
-        <div class="pointer"></div>
-        <div class="wheel-container">
-            <div class="outer-bands" id="outer-bands">
-                <div class="numbers" id="numbers"></div>
+    <div class="wallet-amount cabin" id="wallet-amount">Wallet Amount: </div>
+    <div class = "main-layout">
+        <div class="wheel-section">
+            <div class="wheel-border">
+                <div class="pointer"></div>
+                <div class="wheel-container">
+                    <div class="outer-bands" id="outer-bands">
+                        <div class="numbers" id="numbers"></div>
+                    </div>
+                    <div class="ball-divider"></div>
+                    <div class="inner-circle"></div>
+                    <div class="inner-circle-stripes"></div>
+                </div>
             </div>
-            <div class="ball-divider"></div>
-            <div class="inner-circle"></div>
-            <div class="inner-circle-stripes"></div>
         </div>
-    </div>
 
-    <h1 class="bet-heading">Choose a Wager</h1>
-    <div class="betting-grid" id="betting-grid">
-        <div class="betting-side-column">
-            <button class="side-button" id="bet-odd">Odd</button>
-            <button class="side-button" id="bet-even">Even</button>
-        </div>
-        <div class="betting-numbers" id="betting-numbers"></div>
-        <div class="betting-side-column">
-            <button class="side-button" id="bet-0">0</button>
-        </div>
-    </div>
+        <div class="ui-section">
+            <h1 class="bet-heading cabin">Choose a Wager</h1>
+            <div class="betting-grid" id="betting-grid">
+                <div class="betting-side-column">
+                    <button class="side-button" id="bet-odd">Odd</button>
+                    <button class="side-button" id="bet-even">Even</button>
+                </div>
+                <div class="betting-numbers" id="betting-numbers"></div>
+                <div class="betting-side-column">
+                    <button class="side-button" id="bet-0">0</button>
+                </div>
+            </div>
+            <div class="chips">
+                <button class="two-chip" draggable="true" data-value="2"></button>
+                <button class="five-chip" draggable="true" data-value="5"></button>
+                <button class="ten-chip" draggable="true" data-value="10"></button>
+                <button class="twenty-chip" draggable="true" data-value="20"></button>
+                <button class="fifty-chip" draggable="true" data-value="50"></button>
+            </div>
+            
+            <button class="action-button" onclick="spin();">Place Bet</button>
 
-    <div>
-        <button class="two-chip" draggable="true" data-value="2"></button>
-        <button class="five-chip" draggable="true" data-value="5"></button>
-        <button class="ten-chip" draggable="true" data-value="10"></button>
-        <button class="twenty-chip" draggable="true" data-value="20"></button>
-        <button class="fifty-chip" draggable="true" data-value="50"></button>
+        </div>
     </div>
-    <button class="action-button" onclick="spin();">Place Bet</button>
-    <div id="result">Result: </div>
+    
     <div id="win-popup" class="popup">
         <div class="popup-content">
             <p id="popup-message"></p>

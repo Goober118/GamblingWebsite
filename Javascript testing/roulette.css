@@ -1,13 +1,56 @@
 body {
     margin: 0;
     height: 100vh;
-    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
     font-family: Arial, Helvetica, sans-serif;
     background: radial-gradient(circle at center, 
     #2c2c2c 0%, 
     #1a1a1a 70%,  
     #000000 100%  );
     color: white;
+}
+
+h1.zen-tokyo-zoo-regular {
+    margin-top: 32px;
+    font-size: 100px;
+    margin-bottom: 8px;
+    text-align: center;
+    letter-spacing: 10px;
+    font-weight: medium;
+}
+
+.cabin {
+  font-family: "Cabin", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: bold;
+  font-style: normal;
+  font-variation-settings: "wdth" 100;
+}
+
+.main-layout {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 60px;
+    margin-top: 50px;
+    max-width: 1200px;
+    width: 100%;
+}
+
+.wheel-section {
+    flex: 0 0 auto;
+}
+
+.ui-section {
+    flex: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 700px
 }
 
 .pointer {
@@ -24,8 +67,8 @@ body {
 }
 
 .wheel-container {
-    width: 300px;
-    height: 300px;
+    width: 370px;
+    height: 370px;
     border-radius: 50%;
     position: relative;
     overflow: hidden;
@@ -33,10 +76,10 @@ body {
 }
 
 .wheel-border {
-    width: 340px;
-    height: 340px;
+    width: 420px;
+    height: 420px;
     border-radius: 50%;
-    margin: 20px auto;
+    margin: 0;
     position: relative;
     background: radial-gradient(circle, gold 0%, gold 66%, goldenrod 69%, #2e2000 100% );
     display: flex;
@@ -129,13 +172,13 @@ body {
 
 .numbers span {
     position:  absolute;
-    left: 45.5%;
-    top: 47%;
+    left: 46%;
+    top: 47.5%;
     display: block;
     width: 28px;
     height: 18px;
     line-height: 18px;
-    font-size: 12px;
+    font-size: 16px;
     font-weight: bold;
     color: white;
     text-align: center;
@@ -143,10 +186,10 @@ body {
 
 .betting-numbers {
     display: grid;
-    grid-template-columns: repeat(12, 1fr);
-    grid-auto-rows: 1fr;
-    aspect-ratio: 12 / 3;
-    max-width: 600px;
+    grid-template-columns: repeat(12, 50px);
+    grid-auto-rows: 50px;
+    max-width: none;
+    aspect-ratio: unset;
 }
 
 .side-button {
@@ -157,6 +200,7 @@ body {
     background-image: radial-gradient(#005000 20%, #004c00 100%);
     color: white;
     border: 2px solid goldenrod;
+    position: relative;
 }
 
 
@@ -176,34 +220,30 @@ body {
 }
 
 .bet-button-red {
-    position: relative;
     background: darkred;
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
     padding: none;
     font-size: 14px;
+    position: relative;
+
 }
 
 .bet-button-black {
-    position: relative;
     background: black;
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
     padding: none;
     font-size: 14px;
-}
-
-
-.bet-button,
-.side-button {
     position: relative;
 }
+
+
 
 .bet-button {
     position: relative;
-    background: #004c00;
     color: white;
     font-weight: bold;
     border: 2px solid goldenrod;
@@ -262,9 +302,10 @@ body {
 }
 
 .wallet-amount {
-    margin-bottom: 40px;
+    margin-bottom: 24px;
     font-size: 30px;
     font-weight: bold;
+    text-align: center;
 }
 
 .two-chip,
@@ -340,5 +381,5 @@ body {
     justify-content: center;
     font-weight: bold;
     font-size: 14px;
-    pointer-events: none;
+    pointer-events: auto;
 }
