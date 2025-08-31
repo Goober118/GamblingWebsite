@@ -305,8 +305,6 @@ body {
     margin-bottom: 20px;
 }
 
-
-
 .ui-section {
     flex: 1;
     text-align: center;
@@ -358,6 +356,9 @@ body {
 }
 
 .betting-dozens {
+    align-items: center;
+    justify-content: center;
+    position: relative;
     display: grid;
     grid-template-columns: repeat(3, 200px);
     height: 50px;
@@ -365,6 +366,8 @@ body {
 
 .betting-bottom {
     position: relative;
+    align-items: center;
+    justify-content: center;
     display: grid;
     grid-template-columns: repeat(6, 100px);
     height: 50px;
