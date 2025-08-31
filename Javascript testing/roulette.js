@@ -6,8 +6,15 @@ let wheelNumbers = []
 let isSpinning = false;
 const spinAudio = new Audio('sfx/spin.mp3');
 const loseAudio = new Audio('sfx/lose.mp3');
+loseAudio.volume = 0.7;
 const winAudio = new Audio('sfx/win.mp3');
-
+const singleChip = new Audio('sfx/chip.mp3');
+const multipleChips = new Audio('sfx/multiplechips.mp3');
+winAudio.load();
+loseAudio.load();
+spinAudio.load();
+singleChip.load();
+multipleChips.load();
 
 function main() {
     wheel = document.getElementById("outer-bands");
@@ -37,6 +44,7 @@ function main() {
             e.preventDefault();
         });
         spot.addEventListener("drop", e => {
+            singleChip.play();
             handleDrop(e, spot);
         })
     });
@@ -114,6 +122,8 @@ function handleDrop(e, spot) {
         chip.dataset.amount = amount;
         chip.style.cursor = "pointer";
         chip.addEventListener("click", function(e) {
+            if (isSpinning) return;
+            singleChip.play();
             e.stopPropagation();
             chip.remove();
             walletAmount += parseInt(chip.dataset.amount, 10);
@@ -183,40 +193,13 @@ function initBoard() {
             if (!number) continue; 
             const button = document.createElement("button");
             button.classList.add("bet-button");
-            if (number < 10) {
-                if (number % 2 === 0) {
-                button.classList.add("black");
-                button.textContent = number;
-                } else {
+            const redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
+            if (redNumbers.includes(number)) {
                 button.classList.add("red");
-                button.textContent = number;
-                }    
-            } else if (9 < number && number < 20) {
-                if (number % 2 === 0) {
-                button.classList.add("red");
-                button.textContent = number;
-                } else {
+            } else {
                 button.classList.add("black");
-                button.textContent = number;
-                }
-            } else if (19 < number && number < 28) {
-                if (number % 2 === 0) {
-                button.classList.add("black");
-                button.textContent = number;
-                } else {
-                button.classList.add("red");
-                button.textContent = number;
-                }
-            } else if (27 < number && number < 37) {
-                if (number % 2 === 0) {
-                button.classList.add("red");
-                button.textContent = number;
-                } else {
-                button.classList.add("black");
-                button.textContent = number;
-                }
-            };
-
+            }
+            button.textContent = number;
         grid.appendChild(button);
 
         }
@@ -235,8 +218,9 @@ function spin() {
     setTimeout(() => {
         const resultNumber = wheelNumbers[spinNumber];
         resolveBets(resultNumber);
-        document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
         isSpinning = false;
+        document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
+        multipleChips.play()
     }, 5500);
     
 }

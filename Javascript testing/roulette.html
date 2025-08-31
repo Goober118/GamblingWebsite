@@ -13,72 +13,81 @@
     <link href="https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
 </head>
 <body id="body">
-
-    <h1 class="zen-tokyo-zoo-regular">Roulette</h1>
-    <div class="wallet-amount cabin" id="wallet-amount">Wallet Amount: </div>
-    <div class = "main-layout">
-        <div class="wheel-section">
-            <div class="wheel-border">
-                <div class="pointer"></div>
-                <div class="wheel-container">
-                    <div class="outer-bands" id="outer-bands">
-                        <div class="numbers" id="numbers"></div>
-                    </div>
-                    <div class="ball-divider"></div>
-                    <div class="inner-circle"></div>
-                    <div class="inner-circle-stripes"></div>
-                </div>
-            </div>
+    <nav class="navbar">
+        <div class="navbar-left">
+            <span class="navbar-title cabin">Roulette</span>
         </div>
+        <div class="navbar-right">
+            <a class="nav-link cabin" href="#">Logout</a>
+        </div>
+    </nav>
+    <div class="page-content">
+        <h1 class="zen-tokyo-zoo-regular">Roulette</h1>
+        <div class="wallet-amount cabin" id="wallet-amount">Wallet Amount: </div>
+        <div class = "main-layout">
+            <div class="wheel-section">
+                <div class="wheel-border">
+                    <div class="pointer"></div>
+                    <div class="wheel-container">
+                        <div class="outer-bands" id="outer-bands">
+                            <div class="numbers" id="numbers"></div>
+                        </div>
+                        <div class="ball-divider"></div>
+                        <div class="inner-circle"></div>
+                        <div class="inner-circle-stripes"></div>
+                    </div>
+                </div>
+            </div>
 
-        <div class="ui-section">
-            <h1 class="bet-heading cabin">Choose a Wager</h1>
-            <p class="bet-description cabin">Drag and drop chips to place bets. Click placed chips to remove them.</p>
-            <div class="betting-grid" id="betting-grid">
-                <button class="zero-button" id="bet-zero">0</button>
-                <div class="betting-numbers" id="betting-numbers"></div>
-                <div class="betting-col">
-                    <button class="side-button" id="bet-row1">2 to 1</button>
-                    <button class="side-button" id="bet-row2">2 to 1</button>
-                    <button class="side-button" id="bet-row3">2 to 1</button>
+            <div class="ui-section">
+                <h1 class="bet-heading cabin">Choose a Wager</h1>
+                <p class="bet-description cabin">Drag and drop chips to place bets. Click placed chips to remove them.</p>
+                <div class="betting-grid" id="betting-grid">
+                    <button class="zero-button" id="bet-zero">0</button>
+                    <div class="betting-numbers" id="betting-numbers"></div>
+                    <div class="betting-col">
+                        <button class="side-button" id="bet-row1">2 to 1</button>
+                        <button class="side-button" id="bet-row2">2 to 1</button>
+                        <button class="side-button" id="bet-row3">2 to 1</button>
+                    </div>
                 </div>
+                <div class="betting-dozens">
+                    <button class="extra-button" id="bet-1st12">1st 12</button>
+                    <button class="extra-button" id="bet-2nd12">2nd 12</button>
+                    <button class="extra-button" id="bet-3rd12">3rd 12</button>
+                </div>
+                <div class="betting-bottom">
+                    <button class="extra-button" id="bet-1to18">1 to 18</button>
+                    <button class="extra-button" id="bet-even">Even</button>
+                    <button class="extra-button red" id="bet-red">Red</button>
+                    <button class="extra-button black" id="bet-black">Black</button>
+                    <button class="extra-button" id="bet-odd">Odd</button>
+                    <button class="extra-button" id="bet-19to36">19 to 36</button>
+                </div>
+                <div class="chips">
+                    <div class="chip-stack">
+                        <button class="two-chip" draggable="true" data-value="2"></button>
+                        <div class="chip-label cabin">$2</div>
+                    </div>
+                    <div class="chip-stack">
+                        <button class="five-chip" draggable="true" data-value="5"></button>
+                        <div class="chip-label cabin">$5</div>
+                    </div>
+                    <div class="chip-stack">
+                        <button class="ten-chip" draggable="true" data-value="10"></button>
+                        <div class="chip-label cabin">$10</div>
+                    </div>
+                    <div class="chip-stack">
+                        <button class="twenty-chip" draggable="true" data-value="20"></button>
+                        <div class="chip-label cabin">$20</div>
+                    </div>
+                    <div class="chip-stack">
+                        <button class="fifty-chip" draggable="true" data-value="50"></button>
+                        <div class="chip-label cabin">$50</div>
+                    </div>
+                </div> 
+                <button class="action-button" onclick="spin();">Place Bet</button>
             </div>
-            <div class="betting-dozens">
-                <button class="extra-button" id="bet-1st12">1st 12</button>
-                <button class="extra-button" id="bet-2nd12">2nd 12</button>
-                <button class="extra-button" id="bet-3rd12">3rd 12</button>
-            </div>
-            <div class="betting-bottom">
-                <button class="extra-button" id="bet-1to18">1 to 18</button>
-                <button class="extra-button" id="bet-even">Even</button>
-                <button class="extra-button red" id="bet-red">Red</button>
-                <button class="extra-button black" id="bet-black">Black</button>
-                <button class="extra-button" id="bet-odd">Odd</button>
-                <button class="extra-button" id="bet-19to36">19 to 36</button>
-            </div>
-            <div class="chips">
-                <div class="chip-stack">
-                    <button class="two-chip" draggable="true" data-value="2"></button>
-                    <div class="chip-label cabin">$2</div>
-                </div>
-                <div class="chip-stack">
-                    <button class="five-chip" draggable="true" data-value="5"></button>
-                    <div class="chip-label cabin">$5</div>
-                </div>
-                <div class="chip-stack">
-                    <button class="ten-chip" draggable="true" data-value="10"></button>
-                    <div class="chip-label cabin">$10</div>
-                </div>
-                <div class="chip-stack">
-                    <button class="twenty-chip" draggable="true" data-value="20"></button>
-                    <div class="chip-label cabin">$20</div>
-                </div>
-                <div class="chip-stack">
-                    <button class="fifty-chip" draggable="true" data-value="50"></button>
-                    <div class="chip-label cabin">$50</div>
-                </div>
-            </div> 
-            <button class="action-button" onclick="spin();">Place Bet</button>
         </div>
     </div>
     
