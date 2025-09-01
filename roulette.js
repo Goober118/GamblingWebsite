@@ -1,8 +1,9 @@
+// Initialise global variables
 let spinCount = 0;
-let wheel, result, offset, walletDisplay;
+let wheel, offset, walletDisplay;
 let walletAmount = 100;
 let bets = [];
-let wheelNumbers = []
+let wheelNumbers = [];
 let isSpinning = false;
 const spinAudio = new Audio('sfx/spin.mp3');
 const loseAudio = new Audio('sfx/lose.mp3');
@@ -10,15 +11,22 @@ loseAudio.volume = 0.7;
 const winAudio = new Audio('sfx/win.mp3');
 const singleChip = new Audio('sfx/chip.mp3');
 const multipleChips = new Audio('sfx/multiplechips.mp3');
-winAudio.load();
-loseAudio.load();
-spinAudio.load();
-singleChip.load();
-multipleChips.load();
+
+// Load audio files to ensure they are cached and ready to play
+function loadAudio() {
+    winAudio.load();
+    loseAudio.load();
+    spinAudio.load();
+    singleChip.load();
+    multipleChips.load();
+}
 
 function main() {
+    loadAudio();
+
+    // Define wheel and offset
     wheel = document.getElementById("outer-bands");
-    offset = 360 / 37 / 2;
+    offset = 360 / 37 / 2; // Align the wheel correctly
     walletDisplay = document.getElementById("wallet-amount");
     walletDisplay.textContent = "Wallet: $" + walletAmount;
 
@@ -27,12 +35,13 @@ function main() {
 
     // close popup
     document.getElementById("close-popup").addEventListener("click", () => {
-        document.getElementById("win-popup").style.display = "none";
+        document.getElementById("win-popup").style.display = "none"; 
     });
 
     // draggable chips
     document.querySelectorAll(".two-chip, .five-chip, .ten-chip, .twenty-chip, .fifty-chip").forEach(chip => {
         chip.addEventListener("dragstart", e => {
+            // store chip class and value upon dragstart
             e.dataTransfer.setData("value", chip.dataset.value);
             e.dataTransfer.setData("chipClass", chip.className);
         });
@@ -41,8 +50,10 @@ function main() {
     // drop chips
     document.querySelectorAll(".bet-option, .bet-button, .side-button, .extra-button, .zero-button").forEach(spot => {
         spot.addEventListener("dragover", e => {
-            e.preventDefault();
+            e.preventDefault(); // allow the chip to be dropped
         });
+
+        // detect drop, and call the handleDrop function
         spot.addEventListener("drop", e => {
             singleChip.play();
             handleDrop(e, spot);
@@ -55,15 +66,18 @@ function main() {
 function handleDrop(e, spot) {
     e.preventDefault();
 
-    if (spot.querySelector('.chip-on-board')) return;
-    if (isSpinning) return;
+    if (spot.querySelector('.chip-on-board')) return; // return if a chip is already placed
+    if (isSpinning) return; // return if the wheel is currently spinning
 
+    // remove existing chip from the spot if present
     const oldChip = spot.querySelector(".chip-on-board");
     if (oldChip) oldChip.remove();
 
+    // retrieve chip class and value
     const amount = parseInt(e.dataTransfer.getData("value"), 10);
     const chipClass = e.dataTransfer.getData("chipClass").split(" ")[0];
 
+    // determine bet type
     let betType, value;
     if (spot.id === "bet-1st12") {
         betType = "dozen";
@@ -113,21 +127,32 @@ function handleDrop(e, spot) {
         value = parseInt(spot.textContent, 10);
     }
 
-    if (walletAmount >= amount) {
+    if (walletAmount >= amount) { // only allow a bet to be placed if the player's wallet has enough funds
+        
+        // deduct the bet amount from the wallet and update the display
         walletAmount -= amount;
         walletDisplay.textContent = "Wallet: $" + walletAmount;
-        bets.push({ type: betType, value, amount });
+
+        bets.push({ type: betType, value, amount }); // Add the bet to bets array
+        
+        // create a chip element on the board
         const chip = document.createElement("div");
         chip.className = chipClass + " chip-on-board";
         chip.dataset.amount = amount;
         chip.style.cursor = "pointer";
+
+        // functionality to remove chips
         chip.addEventListener("click", function(e) {
             if (isSpinning) return;
             singleChip.play();
             e.stopPropagation();
             chip.remove();
+
+            // refund the chip amount back to the wallet
             walletAmount += parseInt(chip.dataset.amount, 10);
             walletDisplay.textContent = "Wallet: $" + walletAmount;
+
+            // remove the corresponding bet from the bets array
             bets = bets.filter(bet => {
                 if (bet.type === "number") {
                     return !(bet.value === parseInt(spot.textContent, 10) && bet.amount === parseInt(chip.dataset.amount, 10));
@@ -141,15 +166,11 @@ function handleDrop(e, spot) {
         spot.appendChild(chip);
         chip.setAttribute("draggable", "false");
     } else {
-        console.log("Insufficient funds to place bet");
+        return;
     };
 };
 
-
-    
-
-
-
+// initialise the roulette wheel numbers visually
 function initWheel() {
     
     // Array of wheel numbers offset by 1 counterclockwise to match the colour bands
@@ -162,16 +183,17 @@ function initWheel() {
     const numbersContainer = document.getElementById("numbers");
     const anglePerNumber = 360 / 37;
 
+    // create a span element for each number's position on the board
     wheelNumbers.forEach((num, i) => {
-
-        const span = document.createElement("span"); // Create one span element for each number
-        span.textContent = num; // Insert the number into the corresponding span position
+        const span = document.createElement("span");
+        span.textContent = num;
         span.style.transform = `rotate(${i * anglePerNumber}deg) translateY(-170px)`; // position each span element by multiplying the band angle size by the index number, then translate it outwards to create a 140px radius
         numbersContainer.appendChild(span);
         
     });
 }
 
+// Initialise the betting board with number buttons
 function initBoard() {
 
     const grid = document.getElementById("betting-numbers");
