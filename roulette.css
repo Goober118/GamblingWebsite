@@ -47,6 +47,12 @@ body {
 
 }
 
+.reset-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .navbar {
     width: 100%;
     display: flex;

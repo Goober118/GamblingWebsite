@@ -24,6 +24,9 @@
     <div class="page-content">
         <h1 class="zen-tokyo-zoo-regular">Roulette</h1>
         <div class="wallet-amount cabin" id="wallet-amount">Wallet Amount: ${{ user.wallet}}</div>
+        <div class="reset-container">
+            <button class="action-button" onclick="reset()">Reset Money</button>
+        </div>
         <div class = "main-layout">
             <div class="wheel-section">
                 <div class="wheel-border">
@@ -86,7 +89,7 @@
                         <div class="chip-label cabin">$50</div>
                     </div>
                 </div> 
-                <button class="action-button" onclick="spin();">Place Bet</button>
+                <button class="action-button" onclick="spin()">Place Bet</button>
             </div>
         </div>
     </div>

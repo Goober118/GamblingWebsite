@@ -228,43 +228,53 @@ function initBoard() {
     }
 }
 
+// Spin the wheel
 function spin() {
-    if (isSpinning) return;
-    spinAudio.play();
+    if (isSpinning) return; // Don't allow duplicate spins
+    spinAudio.play(); 
     isSpinning = true;
-    const spinNumber = Math.floor(Math.random() * 37);
-    const anglePerNumber = 360 / 37;
-    spinCount++;
+    const spinNumber = Math.floor(Math.random() * 37); // Randomly generate a number
+    const anglePerNumber = 360 / 37; // Define the angle of each number section
+    spinCount++; // Increase spincount with each spin
     let targetRotation = (360 * 5 * spinCount) + (360 - spinNumber * anglePerNumber) + offset; 
-    wheel.style.transform = `rotate(${targetRotation}deg)`;
+    wheel.style.transform = `rotate(${targetRotation}deg)`; // Move the wheel to match the generated number
     setTimeout(() => {
-        const resultNumber = wheelNumbers[spinNumber];
+        const resultNumber = wheelNumbers[spinNumber]; // Get the result number based on the randomly generated spin number
         resolveBets(resultNumber);
         isSpinning = false;
+
+        // Remove all existing chips on the board, playing a sound effect
         document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
         multipleChips.play()
-    }, 5500);
+
+    }, 5500); // Wait 5.5 seconds to allow the animation to play before resolving bets
     
 }
 
+// Calculate win conditions and winnings
 function resolveBets(resultNumber) {
     let totalWinnings = 0;
     let won = false;
     const body = document.getElementById("body");
-    bets.forEach(bet => {
+
+    // for each bet chip on the board, calculate if it is a winner
+    bets.forEach(bet => { 
         let winnings = 0;
 
+        // If the bet type is a number
         if (bet.type === "number" && bet.value === resultNumber) {
             winnings = bet.amount * 36;
             won = true;
-
+        
+        // if the bet type is parity
         } else if (bet.type === "bet-odd" && resultNumber % 2 !== 0 && resultNumber != 0) {
             winnings = bet.amount * 2;
             won = true;
-
         } else if (bet.type === "bet-even" && resultNumber % 2 === 0 && resultNumber != 0) {
             winnings = bet.amount * 2; 
             won = true;
+
+        // if the bet type is dozens
         } else if (bet.type === "dozen") {
             if (
                 (bet.value === 1 && resultNumber >= 1 && resultNumber <= 12) ||
@@ -274,6 +284,8 @@ function resolveBets(resultNumber) {
                 winnings = bet.amount * 3;
                 won = true;
             }
+        
+        // if the bet type is "2 to 1"
         } else if (bet.type === "row") {
             if (
                 (bet.value === 1 && [1,4,7,10,13,16,19,22,25,28,31,34].includes(resultNumber)) ||
@@ -283,6 +295,8 @@ function resolveBets(resultNumber) {
                 winnings = bet.amount * 3;
                 won = true;
             }
+
+        // if the bet type is "1 to 18" or "19 to 36"
         } else if (bet.type === "range") {
             if (
                 (bet.value === 1 && resultNumber >= 1 && resultNumber <= 18) ||
@@ -291,6 +305,8 @@ function resolveBets(resultNumber) {
                 winnings = bet.amount * 2;
                 won = true;
             }
+
+        // if the bet type is red or black
         } else if (bet.type === "colour") {
             if (
                 (bet.value === 1 && [1,3,5,7,9,10,12,14,16,18,21,23,25,27,28,30,32,34,36].includes(resultNumber)) ||
@@ -299,18 +315,27 @@ function resolveBets(resultNumber) {
                 winnings = bet.amount * 2;
                 won = true;
             }
+
+        // if the bet type is 0
         } else if (bet.type === "bet-zero" && resultNumber === 0) {
             winnings = bet.amount * 36;
             won = true;
         }
-        totalWinnings += winnings;
+
+        totalWinnings += winnings; // add the winnings of each bet to the total amount of winnings for the spin
     });
-    walletAmount += totalWinnings;
+
+    // add the total spin winnings to the wallet, and update the display
+    walletAmount += totalWinnings; 
     walletDisplay.textContent = "Wallet: $" + walletAmount;
+
+    // Perform win popup execution and sound effects.
     if (won) {
         winAudio.play();
         document.getElementById("popup-message").textContent = `You won $${(totalWinnings)}!`;
         document.getElementById("win-popup").style.display = "block";
+
+    // Perform lose animation and sound effects
     } else if (won === false) {
         loseAudio.play();
         body.classList.add("lose");
@@ -325,7 +350,7 @@ function resolveBets(resultNumber) {
         }, 100);
     };
     
-    bets = [];
+    bets = []; // Clear the bets array
 }
 
 main()
