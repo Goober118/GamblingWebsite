@@ -12,6 +12,11 @@ const winAudio = new Audio('sfx/win.mp3');
 const singleChip = new Audio('sfx/chip.mp3');
 const multipleChips = new Audio('sfx/multiplechips.mp3');
 
+function saveState() {
+    localStorage.setItem('walletAmount', walletAmount);
+    localStorage.setItem('bets', JSON.stringify(bets));
+}
+
 // Load audio files to ensure they are cached and ready to play
 function loadAudio() {
     winAudio.load();
@@ -59,9 +64,45 @@ function main() {
             handleDrop(e, spot);
         })
     });
-}
-    
 
+    const SavedWallet = localStorage.getItem('walletAmount');
+    if (SavedWallet !== null) {
+        walletAmount = parseInt(SavedWallet, 10);
+        walletDisplay.textContent = "Wallet: $" + walletAmount;
+    }
+
+    const savedBets = localStorage.getItem('bets');
+    if (savedBets) {
+        bets = JSON.parse(savedBets);
+    }
+
+    const savedBoard = localStorage.getItem('boardHTML');
+    if (savedBoard) {
+        document.getElementById('betting-grid').innerHTML = savedBoard;
+        document.querySelectorAll(".chip-on-board").forEach(chip => {
+            chip.addEventListener("click", function(e) {
+                if (isSpinning) return;
+                singleChip.play();
+                e.stopPropagation();
+                chip.remove();
+
+                // refund wallet
+                walletAmount += parseInt(chip.dataset.amount, 10);
+                walletDisplay.textContent = "Wallet: $" + walletAmount;
+
+                // remove correct bet
+                bets = bets.filter(bet => {
+                    return !(bet.amount === parseInt(chip.dataset.amount, 10) &&
+                    bet.type === chip.dataset.type &&
+                    bet.value == chip.dataset.value);
+                });
+
+                saveState();
+            });
+        });
+    }
+    
+}
 
 function handleDrop(e, spot) {
     e.preventDefault();
@@ -119,10 +160,12 @@ function handleDrop(e, spot) {
         betType = "colour";
         value = 1;
     } else if (spot.id === "bet-zero") {
-        betType = "bet-zero";
+        betType = "number";
         value = 0;
-    }
-    else {
+    } else if (spot.classList.contains("side-button")) {
+        betType = "row";
+        value = spot.dataset.row;
+    } else {
         betType = "number";
         value = parseInt(spot.textContent, 10);
     }
@@ -139,6 +182,8 @@ function handleDrop(e, spot) {
         const chip = document.createElement("div");
         chip.className = chipClass + " chip-on-board";
         chip.dataset.amount = amount;
+        chip.dataset.type = betType;
+        chip.dataset.value = value;
         chip.style.cursor = "pointer";
 
         // functionality to remove chips
@@ -151,6 +196,7 @@ function handleDrop(e, spot) {
             // refund the chip amount back to the wallet
             walletAmount += parseInt(chip.dataset.amount, 10);
             walletDisplay.textContent = "Wallet: $" + walletAmount;
+            saveState();
 
             // remove the corresponding bet from the bets array
             bets = bets.filter(bet => {
@@ -165,6 +211,7 @@ function handleDrop(e, spot) {
         });
         spot.appendChild(chip);
         chip.setAttribute("draggable", "false");
+        saveState();
     } else {
         return;
     };
@@ -242,13 +289,16 @@ function spin() {
         const resultNumber = wheelNumbers[spinNumber]; // Get the result number based on the randomly generated spin number
         resolveBets(resultNumber);
         isSpinning = false;
-
-        // Remove all existing chips on the board, playing a sound effect
-        document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
-        multipleChips.play()
+        removeChips();   
 
     }, 5500); // Wait 5.5 seconds to allow the animation to play before resolving bets
     
+}
+
+// Remove all existing chips on the board, playing a sound effect
+function removeChips() {
+        document.querySelectorAll(".chip-on-board").forEach(c => c.remove());
+        multipleChips.play();
 }
 
 // Calculate win conditions and winnings
@@ -328,6 +378,7 @@ function resolveBets(resultNumber) {
     // add the total spin winnings to the wallet, and update the display
     walletAmount += totalWinnings; 
     walletDisplay.textContent = "Wallet: $" + walletAmount;
+    saveState();
 
     // Perform win popup execution and sound effects.
     if (won) {
@@ -351,6 +402,16 @@ function resolveBets(resultNumber) {
     };
     
     bets = []; // Clear the bets array
+}
+
+// Reset the wallet amount
+function reset() {
+    if (isSpinning) return; // Prevent reset if wheel is spinning
+    removeChips(); // Reset the board
+    walletAmount = 100; 
+    bets = [];
+    walletDisplay.textContent = "Wallet: $" + walletAmount;
+    saveState();
 }
 
 main()
