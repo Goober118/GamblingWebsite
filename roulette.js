@@ -71,15 +71,15 @@ function main() {
     document.querySelectorAll(".two-chip, .five-chip, .ten-chip, .twenty-chip, .fifty-chip").forEach(chip => {
         chip.addEventListener("dragstart", e => {
             // store chip class and value upon dragstart
-            e.dataTransfer.setData("value", chip.dataset.value);
+            e.dataTransfer.setData("text/plain", chip.dataset.value);
             e.dataTransfer.setData("chipClass", chip.className);
         });
     });
 
     // drop chips
     document.querySelectorAll(".bet-option, .bet-button, .side-button, .extra-button, .zero-button").forEach(spot => {
-        spot.addEventListener("dragover", e => {
-            e.preventDefault(); // allow the chip to be dropped
+        spot.addEventListener("dragover", chip => {
+            chip.preventDefault(); // allow the chip to be dropped
         });
 
         // detect drop, and call the handleDrop function
@@ -110,7 +110,8 @@ function handleDrop(e, spot) {
     if (oldChip) oldChip.remove();
 
     // retrieve chip class and value
-    const amount = parseInt(e.dataTransfer.getData("value"), 10);
+    const amount = parseInt(e.dataTransfer.getData("text/plain"), 10);
+    console.log("Dropped chip amount:", amount);
     const chipClass = e.dataTransfer.getData("chipClass").split(" ")[0];
 
     // determine bet type
@@ -123,7 +124,7 @@ function handleDrop(e, spot) {
         value = parseInt(spot.textContent, 10);
     }
 
-    
+    console.log("Wallet amount:", walletAmount);
     if (walletAmount >= amount) { // only allow a bet to be placed if the player's wallet has enough funds
         singleChip.play();
         // deduct the bet amount from the wallet and update the display
@@ -141,14 +142,14 @@ function handleDrop(e, spot) {
         chip.style.cursor = "pointer";
 
         // functionality to remove chips
-        chip.addEventListener("click", function(e) {
+        chip.addEventListener("click", function(chip) {
             if (isSpinning) {
                 message = "The wheel is currently spinning"
                 showErrorPopup(message);
                 return;
             }
             singleChip.play();
-            e.stopPropagation();
+            chip.stopPropagation();
             chip.remove();
 
             // refund the chip amount back to the wallet
