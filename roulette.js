@@ -5,29 +5,17 @@ let walletAmount = 100;
 let bets = [];
 let wheelNumbers = [];
 let isSpinning = false;
-let message = "";
-const redNumbers = [1,3,5,7,9,12,14,16,18,21,23,25,27,28,30,32,34,36];
 const spinAudio = new Audio('sfx/spin.mp3');
 const loseAudio = new Audio('sfx/lose.mp3');
 loseAudio.volume = 0.7;
 const winAudio = new Audio('sfx/win.mp3');
 const singleChip = new Audio('sfx/chip.mp3');
 const multipleChips = new Audio('sfx/multiplechips.mp3');
-const betMappings = {
-    "bet-1st12": {type: "dozen", value: 1},
-    "bet-2nd12": {type: "dozen", value: 2},
-    "bet-3rd12": {type: "dozen", value: 3},
-    "bet-odd": {type: "odd", value: null},
-    "bet-even": {type: "even", value: null},
-    "bet-row1": {type: "row", value: 1},
-    "bet-row2": {type: "row", value: 2},
-    "bet-row3": {type: "row", value: 3},
-    "bet-red": {type: "colour", value: 1},
-    "bet-black": {type: "colour", value: 2},
-    "bet-1to18": {type: "range", value: 1},
-    "bet-19to36": {type: "range", value: 2},
-    "bet-zero": {type: "number", value: 0}
-};
+
+function saveState() {
+    localStorage.setItem('walletAmount', walletAmount);
+    localStorage.setItem('bets', JSON.stringify(bets));
+}
 
 // Load audio files to ensure they are cached and ready to play
 function loadAudio() {
@@ -36,18 +24,6 @@ function loadAudio() {
     spinAudio.load();
     singleChip.load();
     multipleChips.load();
-}
-
-function showErrorPopup(message) {
-    const popup = document.getElementById("error-message");
-    popup.textContent = message;
-    if (popup.classList.contains("shake")) return;
-    popup.style.display = "block";
-    popup.classList.add("shake");
-    setTimeout(() => {
-        popup.classList.remove("shake");
-        popup.style.display = "none";
-    }, 2000);
 }
 
 function main() {
@@ -84,27 +60,56 @@ function main() {
 
         // detect drop, and call the handleDrop function
         spot.addEventListener("drop", e => {
+            singleChip.play();
             handleDrop(e, spot);
         })
     });
+
+    const SavedWallet = localStorage.getItem('walletAmount');
+    if (SavedWallet !== null) {
+        walletAmount = parseInt(SavedWallet, 10);
+        walletDisplay.textContent = "Wallet: $" + walletAmount;
+    }
+
+    const savedBets = localStorage.getItem('bets');
+    if (savedBets) {
+        bets = JSON.parse(savedBets);
+    }
+
+    const savedBoard = localStorage.getItem('boardHTML');
+    if (savedBoard) {
+        document.getElementById('betting-grid').innerHTML = savedBoard;
+        document.querySelectorAll(".chip-on-board").forEach(chip => {
+            chip.addEventListener("click", function(e) {
+                if (isSpinning) return;
+                singleChip.play();
+                e.stopPropagation();
+                chip.remove();
+
+                // refund wallet
+                walletAmount += parseInt(chip.dataset.amount, 10);
+                walletDisplay.textContent = "Wallet: $" + walletAmount;
+
+                // remove correct bet
+                bets = bets.filter(bet => {
+                    return !(bet.amount === parseInt(chip.dataset.amount, 10) &&
+                    bet.type === chip.dataset.type &&
+                    bet.value == chip.dataset.value);
+                });
+
+                saveState();
+            });
+        });
+    }
     
 }
 
 function handleDrop(e, spot) {
     e.preventDefault();
 
-    // return if a chip is already placed
-    if (spot.querySelector('.chip-on-board')) {
-        message = "A chip is already placed here.";
-        showErrorPopup(message);
-        return;
-    }
-    // return if the wheel is currently spinning
-    if (isSpinning) {
-        message = "The wheel is currently spinning.";
-        showErrorPopup(message);
-        return; 
-    }
+    if (spot.querySelector('.chip-on-board')) return; // return if a chip is already placed
+    if (isSpinning) return; // return if the wheel is currently spinning
+
     // remove existing chip from the spot if present
     const oldChip = spot.querySelector(".chip-on-board");
     if (oldChip) oldChip.remove();
@@ -116,9 +121,51 @@ function handleDrop(e, spot) {
 
     // determine bet type
     let betType, value;
-
-    if (betMappings[spot.id]) {
-        ({type: betType, value} = betMappings[spot.id]);
+    if (spot.id === "bet-1st12") {
+        betType = "dozen";
+        value = 1;
+    } else if (spot.id === "bet-2nd12") {
+        betType = "dozen";
+        value = 2;
+    } else if (spot.id === "bet-3rd12") {
+        betType = "dozen";
+        value = 3;
+    } else if (spot.id === "bet-odd") {
+        betType = spot.id;
+        value = null;
+    } else if (spot.id === "bet-even") {
+        betType = spot.id;
+        value = null;
+    } else if (spot.id === "bet-row1") {
+        betType = "row";
+        value = 1;
+    } else if (spot.id === "bet-row2") {
+        betType = "row";
+        value = 2;
+    } else if (spot.id === "bet-row3") {
+        betType = "row";
+        value = 3;
+    } else if (spot.id === "bet-red") {
+        betType = "colour";
+        value = 1;
+    } else if (spot.id === "bet-black") {
+        betType = "colour";
+        value = 2;
+    } else if (spot.id === "bet-1to18") {
+        betType = "range";
+        value = 1;
+    } else if (spot.id === "bet-19to36") {
+        betType = "range";
+        value = 2;
+    } else if (spot.id === "bet-red") {
+        betType = "colour";
+        value = 1;
+    } else if (spot.id === "bet-zero") {
+        betType = "number";
+        value = 0;
+    } else if (spot.classList.contains("side-button")) {
+        betType = "row";
+        value = spot.dataset.row;
     } else {
         betType = "number";
         value = parseInt(spot.textContent, 10);
@@ -126,7 +173,7 @@ function handleDrop(e, spot) {
 
     console.log("Wallet amount:", walletAmount);
     if (walletAmount >= amount) { // only allow a bet to be placed if the player's wallet has enough funds
-        singleChip.play();
+        
         // deduct the bet amount from the wallet and update the display
         walletAmount -= amount;
         walletDisplay.textContent = "Wallet: $" + walletAmount;
@@ -155,7 +202,7 @@ function handleDrop(e, spot) {
             // refund the chip amount back to the wallet
             walletAmount += parseInt(chip.dataset.amount, 10);
             walletDisplay.textContent = "Wallet: $" + walletAmount;
-            
+            saveState();
 
             // remove the corresponding bet from the bets array
             bets = bets.filter(bet => {
@@ -170,9 +217,8 @@ function handleDrop(e, spot) {
         });
         spot.appendChild(chip);
         chip.setAttribute("draggable", "false");
+        saveState();
     } else {
-        message = "Insufficient funds to place bet";
-        showErrorPopup(message);
         return;
     };
 };
@@ -203,38 +249,33 @@ function initWheel() {
 // Initialise the betting board with number buttons
 function initBoard() {
 
-    const grid = document.getElementById("betting-numbers"); // Fetch the html grid element where the number buttons are to be placed
-    const columns = 12, rows = 3; // Set the number of columns and rows for the betting grid
-    const buttons = []; // Create an array to store numbers for each seperate button
+    const grid = document.getElementById("betting-numbers");
+    const columns = 12, rows = 3;
+    const buttons = [];
 
-    // Fill the buttons array with numbers
     for (let row = 0; row < rows; row++) {
         buttons[row] = [];
         for (let col = 0; col < columns; col++) {
-            // calculate the button number based on its row and column position
             const number = col * rows + row + 1;
-            // end the process if the number is greater than 36
             if (number > 36) continue;
             buttons[row][col] = number;
         }
     }
 
-    // create buttons for each row and column
     for (let row = 0; row < rows; row++) {
         for (let col = 0; col < columns; col++) {
             const number = buttons[row][col];
-            if (!number) continue; // safeguard against empty grid spots
-            // create a button elemnt for the number
+            if (!number) continue; 
             const button = document.createElement("button");
             button.classList.add("bet-button");
-            // add the appropriate color class to the button
+            const redNumbers = [1,3,5,7,9,12,14,16,18,19,21,23,25,27,30,32,34,36];
             if (redNumbers.includes(number)) {
                 button.classList.add("red");
             } else {
                 button.classList.add("black");
             }
-            button.textContent = number; // Set the button's text to the number
-        grid.appendChild(button); // add the button to the grid
+            button.textContent = number;
+        grid.appendChild(button);
 
         }
     }
@@ -242,20 +283,7 @@ function initBoard() {
 
 // Spin the wheel
 function spin() {
-
-    // Disable the wheel and display a message if already spinning
-    if (isSpinning) {
-        message = "Spin in progress";
-        showErrorPopup(message);
-        return;
-    }
-
-    // Disable the wheel and display a message if no bets are placed
-    if (bets.length === 0) {
-        message = "Place a bet first";
-        showErrorPopup(message);
-        return;
-    }
+    if (isSpinning) return; // Don't allow duplicate spins
     spinAudio.play(); 
     isSpinning = true;
     const spinNumber = Math.floor(Math.random() * 37); // Randomly generate a number
@@ -337,8 +365,8 @@ function resolveBets(resultNumber) {
         // if the bet type is red or black
         } else if (bet.type === "colour") {
             if (
-                (bet.value === 1 && redNumbers.includes(resultNumber)) ||
-                (bet.value === 2 && !redNumbers.includes(resultNumber))
+                (bet.value === 1 && [1,3,5,7,9,10,12,14,16,18,21,23,25,27,28,30,32,34,36].includes(resultNumber)) ||
+                (bet.value === 2 && [2,4,6,8,11,13,15,17,19,21,23,25,27,29,31,33,35].includes(resultNumber))
             ) {
                 winnings = bet.amount * 2;
                 won = true;
@@ -356,11 +384,12 @@ function resolveBets(resultNumber) {
     // add the total spin winnings to the wallet, and update the display
     walletAmount += totalWinnings; 
     walletDisplay.textContent = "Wallet: $" + walletAmount;
+    saveState();
 
     // Perform win popup execution and sound effects.
     if (won) {
         winAudio.play();
-        document.getElementById("win-popup-message").textContent = `You won $${(totalWinnings)}!`;
+        document.getElementById("popup-message").textContent = `You won $${(totalWinnings)}!`;
         document.getElementById("win-popup").style.display = "block";
 
     // Perform lose animation and sound effects
@@ -383,15 +412,12 @@ function resolveBets(resultNumber) {
 
 // Reset the wallet amount
 function reset() {
-    if (isSpinning) {
-        message = "Spin in progress";
-        showErrorPopup(message);
-        return; // Prevent reset if wheel is spinning
-    }
+    if (isSpinning) return; // Prevent reset if wheel is spinning
     removeChips(); // Reset the board
     walletAmount = 100; 
     bets = [];
     walletDisplay.textContent = "Wallet: $" + walletAmount;
+    saveState();
 }
 
 main()
