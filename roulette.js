@@ -6,6 +6,7 @@ let bets = [];
 let wheelNumbers = [];
 let isSpinning = false;
 let message = "";
+let currentRotation = 0;
 const redNumbers = [1,3,5,7,9,12,14,16,18,21,23,25,27,28,30,32,34,36];
 const spinAudio = new Audio('sfx/spin.mp3');
 const loseAudio = new Audio('sfx/lose.mp3');
@@ -71,15 +72,15 @@ function main() {
     document.querySelectorAll(".two-chip, .five-chip, .ten-chip, .twenty-chip, .fifty-chip").forEach(chip => {
         chip.addEventListener("dragstart", e => {
             // store chip class and value upon dragstart
-            e.dataTransfer.setData("value", chip.dataset.value);
+            e.dataTransfer.setData("text/plain", chip.dataset.value);
             e.dataTransfer.setData("chipClass", chip.className);
         });
     });
 
     // drop chips
     document.querySelectorAll(".bet-option, .bet-button, .side-button, .extra-button, .zero-button").forEach(spot => {
-        spot.addEventListener("dragover", e => {
-            e.preventDefault(); // allow the chip to be dropped
+        spot.addEventListener("dragover", chip => {
+            chip.preventDefault(); // allow the chip to be dropped
         });
 
         // detect drop, and call the handleDrop function
@@ -110,7 +111,8 @@ function handleDrop(e, spot) {
     if (oldChip) oldChip.remove();
 
     // retrieve chip class and value
-    const amount = parseInt(e.dataTransfer.getData("value"), 10);
+    const amount = parseInt(e.dataTransfer.getData("text/plain"), 10);
+    console.log("Dropped chip amount:", amount);
     const chipClass = e.dataTransfer.getData("chipClass").split(" ")[0];
 
     // determine bet type
@@ -123,7 +125,7 @@ function handleDrop(e, spot) {
         value = parseInt(spot.textContent, 10);
     }
 
-    
+    console.log("Wallet amount:", walletAmount);
     if (walletAmount >= amount) { // only allow a bet to be placed if the player's wallet has enough funds
         singleChip.play();
         // deduct the bet amount from the wallet and update the display
@@ -158,13 +160,7 @@ function handleDrop(e, spot) {
 
             // remove the corresponding bet from the bets array
             bets = bets.filter(bet => {
-                if (bet.type === "number") {
-                    return !(bet.value === parseInt(spot.textContent, 10) && bet.amount === parseInt(chip.dataset.amount, 10));
-                }
-                if (bet.type === "dozen") {
-                    return !(bet.value === value && bet.amount === parseInt(chip.dataset.amount, 10));
-                }
-                return !(bet.type === spot.id && bet.amount === parseInt(chip.dataset.amount, 10));
+                return !(bet.type === betType && bet.value === value && bet.amount === parseInt(chip.dataset.amount, 10));
             });
         });
         spot.appendChild(chip);
@@ -259,9 +255,11 @@ function spin() {
     isSpinning = true;
     const spinNumber = Math.floor(Math.random() * 37); // Randomly generate a number
     const anglePerNumber = 360 / 37; // Define the angle of each number section
-    spinCount++; // Increase spincount with each spin
-    let targetRotation = (360 * 5 * spinCount) + (360 - spinNumber * anglePerNumber) + offset; 
+    const rotationsPerSpin = 5;
+   // Increase spincount with each spin
+    const targetRotation = currentRotation + (360 * rotationsPerSpin) + (360 - spinNumber * anglePerNumber) + offset; 
     wheel.style.transform = `rotate(${targetRotation}deg)`; // Move the wheel to match the generated number
+    currentRotation = targetRotation;
     setTimeout(() => {
         const resultNumber = wheelNumbers[spinNumber]; // Get the result number based on the randomly generated spin number
         resolveBets(resultNumber);
@@ -394,7 +392,3 @@ function reset() {
 }
 
 main()
-
-
-
-

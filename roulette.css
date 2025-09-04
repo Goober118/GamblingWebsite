@@ -2,7 +2,6 @@
 
 h1.zen-tokyo-zoo-regular {
     font-family: 'Zen Tokyo Zoo', cursive, sans-serif;
-    margin-top: 10px;
     font-size: 100px;
     margin-bottom: 8px;
     text-align: center;
@@ -72,8 +71,7 @@ body {
 
 .win-popup-content {
     color: black;
-    font-weight: bold;;
-    background: #fff;
+    font-weight: bold;
     margin: 15% auto;
     padding: 20px;
     border-radius: 12px;
@@ -317,41 +315,34 @@ body {
 .side-button,
 .extra-button,
 .zero-button {
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
     position: relative;
     min-width: 50px;
     min-height: 50px;
     align-items: center;
     justify-content: center;
-    display: flex;
+    display: block;
+    text-align: center;
 }
 
 .zero-button {
     width: 50px;
     height: 150px;
     background-image: radial-gradient(#005000 20%, #004c00 100%);
-    color: white;
-    font-weight: bold;
-    font-size: 14px;
     border: 2px solid goldenrod;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     position: relative;
 }
 
 .side-button, .extra-button {
-    font-size: 14px;
-    font-weight: bold;
     background-image: radial-gradient(#005000 20%, #004c00 100%);
-    color: white;
     border: 2px solid goldenrod;
-    position: relative;
 }
 
 .betting-dozens {
     align-items: center;
     justify-content: center;
-    position: relative;
     display: grid;
     grid-template-columns: repeat(3, 200px);
     height: 50px;
@@ -375,7 +366,6 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto;
 }
 
 .red {
@@ -387,11 +377,12 @@ body {
 }
 
 .bet-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    color: white;
-    font-weight: bold;
+    cursor: pointer;
     border: 2px solid goldenrod;
-    font-size: 14px;
 }
 
 .action-button {
@@ -409,7 +400,6 @@ body {
     flex-direction: row;
     justify-content: center;
     align-items: flex-end;
-    margin-top: 25px;
 }
 
 .two-chip,
@@ -419,7 +409,6 @@ body {
 .fifty-chip,
 .chip-on-board {
     position: relative;
-    border: 2px solid white;
     box-shadow: 0 2px 6px rgba(0,0,0,0.5);
     display: inline-block;
     z-index: 1;
@@ -431,6 +420,7 @@ body {
     margin: 5px;
     cursor: grab;
 }
+
 
 .two-chip:hover,
 .five-chip:hover,
@@ -497,4 +487,3 @@ body {
     pointer-events: auto;
     margin: 0;
 }
-
