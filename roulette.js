@@ -88,7 +88,6 @@ function main() {
             handleDrop(e, spot);
         })
     });
-    
 }
 
 function handleDrop(e, spot) {
@@ -191,7 +190,6 @@ function initWheel() {
         span.textContent = num;
         span.style.transform = `rotate(${i * anglePerNumber}deg) translateY(-170px)`; // position each span element by multiplying the band angle size by the index number, then translate it outwards to create a 140px radius
         numbersContainer.appendChild(span);
-        
     });
 }
 
